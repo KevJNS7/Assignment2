@@ -11,7 +11,7 @@
     
     $isLoggedIn = isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true;
     $username = $isLoggedIn ? $_SESSION['username'] : '';
-    $userRole = $isLoggedIn && isset($_SESSION['role']) ? $_SESSION['role'] : '';
+    $isAdmin = $isLoggedIn && isset($_SESSION['is_admin']) && $_SESSION['is_admin'] === true;
 ?>
     <header class="header">
     <nav class="navigator">
@@ -59,7 +59,7 @@
                     <?php echo htmlspecialchars($username); ?>
                 </a>
                 <ul class="dropdown-menu">
-                    <?php if ($userRole === 'admin'): ?>
+                    <?php if ($isAdmin): ?>
                     <li><a href="adminview.php">Admin</a></li>
                     <?php else: ?>
                     <li><a href="user.php">Profile</a></li>

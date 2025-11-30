@@ -50,7 +50,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
     </section>
 
     <div>
-         <form id="worksho_details" method="post" action="register_process.php">
+         <form id="worksho_details" method="post" action="register_process.php" novalidate="novalidate">
 
             <!-- Personal Info -->
             <fieldset>

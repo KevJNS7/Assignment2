@@ -5,6 +5,17 @@
  * Description: Admin page to edit an existing membership.
  * Date: 2025
  */
+session_start();
+
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+    header("Location: login.php");
+    exit();
+}
+
+if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) {
+    header('Location: index.php');
+    exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -45,17 +56,15 @@
             if (!$conn) {
                 $message = "Database connection failed: " . mysqli_connect_error();
             } else {
-                $firstname = mysqli_real_escape_string($conn, $firstname);
-                $lastname = mysqli_real_escape_string($conn, $lastname);
-                $email = mysqli_real_escape_string($conn, $email);
-                $loginID = mysqli_real_escape_string($conn, $loginID);
-                $oldLoginID = mysqli_real_escape_string($conn, $oldLoginID);
+                $stmt1 = $conn->prepare("UPDATE membership SET firstname=?, lastname=?, email=?, loginID=? WHERE id=?");
+                $stmt1->bind_param("ssssi", $firstname, $lastname, $email, $loginID, $id);
+                $membershipUpdated = $stmt1->execute();
+                $stmt1->close();
 
-                $sql1 = "UPDATE membership SET firstname='$firstname', lastname='$lastname', email='$email', loginID='$loginID' WHERE id=$id";
-                $membershipUpdated = mysqli_query($conn, $sql1);
-
-                $sql2 = "UPDATE user SET username='$loginID' WHERE username='$oldLoginID'";
-                $userUpdated = mysqli_query($conn, $sql2);
+                $stmt2 = $conn->prepare("UPDATE user SET username=? WHERE username=?");
+                $stmt2->bind_param("ss", $loginID, $oldLoginID);
+                $userUpdated = $stmt2->execute();
+                $stmt2->close();
                 
                 mysqli_close($conn);
                 
@@ -75,9 +84,12 @@
     if (!$conn) {
         $message = "Database connection failed: " . mysqli_connect_error();
     } else {
-        $sql = "SELECT id, firstname, lastname, email, loginID FROM membership WHERE id = $id";
-        $result = mysqli_query($conn, $sql);
-        $membership = mysqli_fetch_assoc($result);
+        $stmt = $conn->prepare("SELECT id, firstname, lastname, email, loginID FROM membership WHERE id = ?");
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $membership = $result->fetch_assoc();
+        $stmt->close();
         
         mysqli_close($conn);
     }

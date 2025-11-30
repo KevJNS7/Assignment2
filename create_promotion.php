@@ -5,6 +5,11 @@
  * Description: Admin page to create a new promotion.
  * Date: 2025
  */
+// Redirect if accessed directly
+if (basename($_SERVER['PHP_SELF']) == 'create_promotion.php' && !isset($_SERVER['HTTP_REFERER'])) {
+    header("Location: adminview.php?page=promotion");
+    exit();
+}
 
 $servername = "localhost";
 $username = "root";

@@ -5,6 +5,18 @@
  * Description: Admin page to edit an existing workshop registration.
  * Date: 2025
  */
+session_start();
+
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+    header("Location: login.php");
+    exit();
+}
+
+if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) {
+    header('Location: index.php');
+    exit();
+}
+
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -44,52 +56,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($firstname) || empty($lastname) || empty($email)) {
         $message = "Error: Name and Email are required";
     } else {
-        $firstname = mysqli_real_escape_string($conn, $firstname);
-        $lastname = mysqli_real_escape_string($conn, $lastname);
-        $email = mysqli_real_escape_string($conn, $email);
-        $phone = mysqli_real_escape_string($conn, $phone);
-        $street = mysqli_real_escape_string($conn, $street);
-        $city = mysqli_real_escape_string($conn, $city);
-        $state = mysqli_real_escape_string($conn, $state);
-        $postcode = mysqli_real_escape_string($conn, $postcode);
-        $dateofbirth = mysqli_real_escape_string($conn, $dateofbirth);
-        $membershiptype = mysqli_real_escape_string($conn, $membershiptype);
-        $interests = mysqli_real_escape_string($conn, $interests);
-        $participants = mysqli_real_escape_string($conn, $participants);
-        $comments = mysqli_real_escape_string($conn, $comments);
-
-        $sql = "UPDATE workshop SET
-            firstname = '$firstname',
-            lastname = '$lastname',
-            email = '$email',
-            phone = '$phone',
-            street = '$street',
-            city = '$city',
-            state = '$state',
-            postcode = '$postcode',
-            dateofbirth = '$dateofbirth',
-            membershiptype = '$membershiptype',
-            interests = '$interests',
-            participants = '$participants',
-            comments = '$comments'
-            WHERE id = $id";
+        $stmt = $conn->prepare("UPDATE workshop SET
+            firstname = ?,
+            lastname = ?,
+            email = ?,
+            phone = ?,
+            street = ?,
+            city = ?,
+            state = ?,
+            postcode = ?,
+            dateofbirth = ?,
+            membershiptype = ?,
+            interests = ?,
+            participants = ?,
+            comments = ?
+            WHERE id = ?");
         
-        if (mysqli_query($conn, $sql)) {
+        $stmt->bind_param("sssssssssssssi", $firstname, $lastname, $email, $phone, $street, $city, $state, $postcode, $dateofbirth, $membershiptype, $interests, $participants, $comments, $id);
+        
+        if ($stmt->execute()) {
             $message = "Workshop registration updated successfully!";
         } else {
-            $message = "Error updating record: " . mysqli_error($conn);
+            $message = "Error updating record: " . $stmt->error;
         }
+        $stmt->close();
     }
 }
 
 // Fetch current workshop data
-$sql = "SELECT * FROM workshop WHERE id = $id";
-$result = mysqli_query($conn, $sql);
+$stmt = $conn->prepare("SELECT * FROM workshop WHERE id = ?");
+$stmt->bind_param("i", $id);
+$stmt->execute();
+$result = $stmt->get_result();
 
-if (mysqli_num_rows($result) !== 1) {
+if ($result->num_rows !== 1) {
     die("Workshop record not found");
 }
-$workshop = mysqli_fetch_assoc($result);
+$workshop = $result->fetch_assoc();
+$stmt->close();
 mysqli_close($conn);
 ?>
 

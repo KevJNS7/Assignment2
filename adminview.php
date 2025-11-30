@@ -12,7 +12,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     exit();
 }
 
-if ($_SESSION['role'] !== 'admin') {
+if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) {
     $_SESSION['error_message'] = 'Access denied! You are not admin.';
     header('Location: index.php');
     exit();

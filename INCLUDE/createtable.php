@@ -65,8 +65,13 @@ $sqli4 = "CREATE TABLE IF NOT EXISTS user (
     id INT(6) AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) NOT NULL UNIQUE,
     password VARCHAR(50) NOT NULL,
-    profile_pic VARCHAR(255) DEFAULT NULL,
-    role ENUM('admin', 'user') DEFAULT 'user',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)";
+
+$sqli4b = "CREATE TABLE IF NOT EXISTS admin (
+    id INT(6) AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 )";
 
@@ -115,11 +120,29 @@ mysqli_query($conn, $sql1);
 mysqli_query($conn, $sqli2);
 mysqli_query($conn, $sqli3);
 mysqli_query($conn, $sqli4);
+mysqli_query($conn, $sqli4b);
 mysqli_query($conn, $sqli5);
 mysqli_query($conn, $sqli6);
 mysqli_query($conn, $sqli7);
 mysqli_query($conn, $sqli8);
+
 mysqli_close($conn);
+?>
+
+<?php
+// Insert default admin
+$conn = mysqli_connect($servername, $username, $password, $dbname);
+
+if ($conn) {
+    $check_admin = mysqli_query($conn, "SELECT id FROM admin LIMIT 1");
+    if (mysqli_num_rows($check_admin) == 0) {
+        $admin_username = 'Admin';
+        $admin_password = 'Admin';
+        $insert_admin = "INSERT INTO admin (username, password) VALUES ('$admin_username', '$admin_password')";
+        mysqli_query($conn, $insert_admin);
+    }
+    mysqli_close($conn);
+}
 ?>
 
 <?php

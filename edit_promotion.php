@@ -1,4 +1,22 @@
 <?php
+/**
+ * Filename: edit_promotion.php
+ * Author: Kevinn Jose, Jiang Yu, Vincent, Ahmed
+ * Description: Admin page to edit an existing promotion.
+ * Date: 2025
+ */
+session_start();
+
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+    header("Location: login.php");
+    exit();
+}
+
+if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) {
+    header('Location: index.php');
+    exit();
+}
+
 $servername = "localhost";
 $username = "root";
 $password = "";

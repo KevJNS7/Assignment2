@@ -26,35 +26,46 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = mysqli_real_escape_string($conn, $username);
     $password = mysqli_real_escape_string($conn, $password);
     
-    $sql = "SELECT * FROM user WHERE username = '$username' AND password = '$password'";
-    $result = mysqli_query($conn, $sql);
+    // First check admin table
+    $sql_admin = "SELECT * FROM admin WHERE BINARY username = '$username' AND BINARY password = '$password'";
+    $result_admin = mysqli_query($conn, $sql_admin);
     
-    if (mysqli_num_rows($result) > 0) {
-        $row = mysqli_fetch_assoc($result);
+    if (mysqli_num_rows($result_admin) > 0) {
+        $row = mysqli_fetch_assoc($result_admin);
         
         $_SESSION['loggedin'] = true;
         $_SESSION['username'] = $username;
-        $_SESSION['role'] = $row['role'];
         $_SESSION['user_id'] = $row['id'];
+        $_SESSION['is_admin'] = true;
         
         mysqli_close($conn);
-        
-        // Check the role of the user
-        // Admin (go to adminview.php)
-        if ($row['role'] == 'admin') {
-            header("Location: adminview.php");
-            exit();
-        // User (go to user.php)
-        } else {
-            header("Location: user.php");
-            exit();
-        }
-    } else {
-        mysqli_close($conn);
-        $_SESSION['login_error'] = "Wrong Username or Password!";
-        header("Location: login.php");
+        header("Location: adminview.php");
         exit();
     }
+    
+    // Check normal user
+    $sql_user = "SELECT * FROM user WHERE BINARY username = '$username' AND BINARY password = '$password'";
+    $result_user = mysqli_query($conn, $sql_user);
+    
+    if (mysqli_num_rows($result_user) > 0) {
+
+        $row = mysqli_fetch_assoc($result_user);
+        
+        $_SESSION['loggedin'] = true;
+        $_SESSION['username'] = $username;
+        $_SESSION['user_id'] = $row['id'];
+        $_SESSION['is_admin'] = false;
+        
+        mysqli_close($conn);
+        header("Location: user.php");
+        exit();
+    }
+    
+    // Login failed
+    mysqli_close($conn);
+    $_SESSION['login_error'] = "Wrong Username or Password!";
+    header("Location: login.php");
+    exit();
 } else {
     header("Location: login.php");
     exit();

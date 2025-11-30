@@ -5,6 +5,18 @@
  * Description: Admin view for detail customer enquiries.
  * Date: 2025
  */
+session_start();
+
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+    header("Location: login.php");
+    exit();
+}
+
+if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) {
+    header('Location: index.php');
+    exit();
+}
+
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -22,16 +34,18 @@ if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
-$id = mysqli_real_escape_string($conn, $id);
-$sql = "SELECT * FROM enquiry WHERE id = '$id'";
-$result = mysqli_query($conn, $sql);
+$stmt = $conn->prepare("SELECT * FROM enquiry WHERE id = ?");
+$stmt->bind_param("i", $id);
+$stmt->execute();
+$result = $stmt->get_result();
 
-if ($result && mysqli_num_rows($result) === 1) {
-    $enquiry = mysqli_fetch_assoc($result);
+if ($result->num_rows === 1) {
+    $enquiry = $result->fetch_assoc();
 } else {
     die("Enquiry record not found");
 }
 
+$stmt->close();
 mysqli_close($conn);
 ?>
 
