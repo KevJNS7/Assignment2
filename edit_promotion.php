@@ -1,0 +1,139 @@
+<?php
+/**
+ * Filename: edit_promotion.php
+ * Author: Kevinn Jose, Jiang Yu, Vincent, Ahmed
+ * Description: Admin page to edit a promotion.
+ * Date: 2025
+ */
+
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "Root_Flower";
+
+$success = false;
+$error = "";
+
+if (!isset($_GET['id'])) {
+    header("Location: adminview.php?page=promotion");
+    exit();
+}
+
+$id = $_GET['id'];
+$conn = mysqli_connect($servername, $username, $password, $dbname);
+if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
+}
+
+// Fetch existing data
+$stmt = $conn->prepare("SELECT * FROM promotions WHERE id = ?");
+$stmt->bind_param("i", $id);
+$stmt->execute();
+$result = $stmt->get_result();
+$promotion = $result->fetch_assoc();
+$stmt->close();
+
+if (!$promotion) {
+    die("Promotion not found.");
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $title = $_POST['title'];
+    $description = $_POST['description'];
+    $imagePath = $promotion['image'];
+
+    // Handle Image Upload if new image is selected
+    if (!empty($_FILES["image"]["name"])) {
+        $target_dir = "IMAGE/";
+        $target_file = $target_dir . basename($_FILES["image"]["name"]);
+        $uploadOk = 1;
+        $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+
+        $check = getimagesize($_FILES["image"]["tmp_name"]);
+        if($check !== false) {
+            $uploadOk = 1;
+        } else {
+            $error = "File is not an image.";
+            $uploadOk = 0;
+        }
+
+        if ($_FILES["image"]["size"] > 5000000) {
+            $error = "Sorry, your file is too large (max 5MB).";
+            $uploadOk = 0;
+        }
+
+        if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
+        && $imageFileType != "gif" ) {
+            $error = "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+            $uploadOk = 0;
+        }
+
+        if ($uploadOk == 1) {
+            if (move_uploaded_file($_FILES["image"]["tmp_name"], $target_file)) {
+                $imagePath = $target_file;
+            } else {
+                $error = "Sorry, there was an error uploading your file.";
+            }
+        }
+    }
+
+    if (empty($error)) {
+        $stmt = $conn->prepare("UPDATE promotions SET title = ?, description = ?, image = ? WHERE id = ?");
+        $stmt->bind_param("sssi", $title, $description, $imagePath, $id);
+
+        if ($stmt->execute()) {
+            $success = true;
+            header("Location: adminview.php?page=promotion");
+            exit();
+        } else {
+            $error = "Error updating promotion: " . $stmt->error;
+        }
+        $stmt->close();
+    }
+}
+mysqli_close($conn);
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Promotion - Root & Flower</title>
+    <link rel="stylesheet" href="CSS/style.css">
+</head>
+<body>
+    <div class="admin-page">
+        <div class="page-title-row">
+            <h1 class="page-title">Edit Promotion</h1>
+            <a href="adminview.php?page=promotion" class="back-btn">← Back to List</a>
+        </div>
+
+        <?php if (!empty($error)): ?>
+            <div class="error-message"><?php echo htmlspecialchars($error); ?></div>
+        <?php endif; ?>
+
+        <form method="POST" action="" class="enquiry-form" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="title">Title *</label>
+                <input type="text" id="title" name="title" value="<?php echo htmlspecialchars($promotion['title']); ?>" required>
+            </div>
+
+            <div class="form-group">
+                <label for="image">Image (Leave blank to keep current)</label>
+                <input type="file" id="image" name="image">
+                <p>Current Image: <img src="<?php echo htmlspecialchars($promotion['image']); ?>" alt="Current" class="promo-preview"></p>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description *</label>
+                <textarea id="description" name="description" rows="4" required><?php echo htmlspecialchars($promotion['description']); ?></textarea>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="submitt-btn">Update Promotion</button>
+                <a href="adminview.php?page=promotion" class="cancell-btn">Cancel</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

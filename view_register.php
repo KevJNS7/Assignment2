@@ -75,7 +75,7 @@ mysqli_close($conn);
                         <th>Phone Number</th>
                         <th>Date of Birth</th>
                         <th>Interests</th>
-                        <th>Number of Participants</th>
+                        <th>Participants</th>
                         <th>Additional Comments</th>
                         <th>Actions</th> 
                     </tr>

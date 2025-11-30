@@ -60,7 +60,7 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'dashboard';
                     <span class="nav-icon">✉️</span>
                     <span>Enquiry</span>
                 </a>
-                <a href="adminview.php?page=promotionmodule" class="admin-nav-item <?php echo ($page == 'promotionmodule') ? 'active' : ''; ?>">
+                <a href="adminview.php?page=promotion" class="admin-nav-item <?php echo ($page == 'promotion') ? 'active' : ''; ?>">
                     <span class="nav-icon">💥</span>
                     <span>Promotion Module</span>
                 </a>
@@ -81,8 +81,8 @@ $page = isset($_GET['page']) ? $_GET['page'] : 'dashboard';
                 include("view_register.php");
             } elseif ($page == 'enquiry') {
                 include("view_enquiry.php");
-            } elseif ($page == 'promotionmodule') {
-                include("promotionmodule.php");
+            } elseif ($page == 'promotion') {
+                include("view_promotion.php");
             }
             ?>
         </main>

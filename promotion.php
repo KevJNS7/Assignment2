@@ -38,54 +38,29 @@
         
         <section class="promotion-features">
             <div class="feature-cards">
-                <div class="promotion-card">
-                    <img src="IMAGE/promotions1.jpg" alt="Christmas Special Giveaway">
-                    <div class="card-content">
-                        <h3>Special Christmas Giveaway</h3>
-                        <p>Get a special Christmas gift! 3 Lucky Winners for Christmas Floral Workshop on 23 December 2023,
-                        3pm-5pm. Follow our page, like and share this post, tag 3 friends in the comment.</p>
-                    </div>
-                </div>
-                
-                <div class="promotion-card">
-                    <img src="IMAGE/promotions2.jpg" alt="520 Give Away">
-                    <div class="card-content">
-                        <h3>520 Give Away</h3>
-                        <p>Cry Baby Bouquet & Hacipupu Bouquet from Pop Mart Store. Like & Follow us, Comment & tag your 3 friends, Share this post at your story, and Verify your participation.</p>
-                    </div>
-                </div>
-                
-                <div class="promotion-card">
-                    <img src="IMAGE/promotions3.jpg" alt="Preserved Flowers">
-                    <div class="card-content">
-                        <h3>Preserved Flowers in Glass</h3>
-                        <p>Beautiful preserved flowers in elegant glass domes. Perfect gifts that last forever with our special preservation technique. Terms & Conditions Apply.</p>
-                    </div>
-                </div>
-
-                <div class="promotion-card">
-                    <img src="IMAGE/promotions4.jpg" alt="Valentine's Day Special">
-                    <div class="card-content">
-                        <h3>Valentine's Day Early Bird</h3>
-                        <p>14% off early bird special! Order before 30 January 2023 and get amazing discounts on all Valentine's Day bouquets. Limited time offer.</p>
-                    </div>
-                </div>
-
-                <div class="promotion-card">
-                    <img src="IMAGE/promotions5.jpg" alt="Mother's Day Special">
-                    <div class="card-content">
-                        <h3>Happy Mother's Day</h3>
-                        <p>10% off early birds before 30 April 2023. Show your love with beautiful bouquets for Mother's Day celebration on 14 May 2023.</p>
-                    </div>
-                </div>
-
-                <div class="promotion-card">
-                    <img src="IMAGE/promotions6.jpg" alt="Valentine Collection">
-                    <div class="card-content">
-                        <h3>Valentine Collection 2023</h3>
-                        <p>Discover our exclusive Valentine's collection with various bouquet designs. 14% off early bird and 7% off orders before 5 February 2023.</p>
-                    </div>
-                </div>
+                <?php
+                $servername = "localhost";
+                $username = "root";
+                $password = "";
+                $dbname = "Root_Flower";
+                $conn = mysqli_connect($servername, $username, $password, $dbname);
+                if ($conn) {
+                    $sql = "SELECT * FROM promotions";
+                    $result = mysqli_query($conn, $sql);
+                    if (mysqli_num_rows($result) > 0) {
+                        while($row = mysqli_fetch_assoc($result)) {
+                            echo '<div class="promotion-card">';
+                            echo '<img src="' . htmlspecialchars($row['image']) . '" alt="' . htmlspecialchars($row['title']) . '">';
+                            echo '<div class="card-content">';
+                            echo '<h3>' . htmlspecialchars($row['title']) . '</h3>';
+                            echo '<p>' . htmlspecialchars($row['description']) . '</p>';
+                            echo '</div>';
+                            echo '</div>';
+                        }
+                    }
+                    mysqli_close($conn);
+                }
+                ?>
             </div>
 
         <aside class="promotion-aside">

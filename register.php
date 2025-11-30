@@ -212,7 +212,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
             </fieldset>
 
             <div class="button-group-enquiry">        
-                <button type="submit">SEND ENQUIRY</button>
+                <button type="submit">SEND WORKSHOP</button>
                 <button type="reset" class="clear-btn">Reset Form</button>
             </div>
 

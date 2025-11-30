@@ -4440,3 +4440,18 @@ nav ul li .dropdown-menu a:hover {
     color: #666;
     line-height: 1.6;
 }
+
+/* Admin Promotion Module */
+.promo-thumb {
+    width: 50px;
+    height: auto;
+}
+
+.promo-preview {
+    width: 150px;
+    height: auto;
+    display: block;
+    margin-top: 10px;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}

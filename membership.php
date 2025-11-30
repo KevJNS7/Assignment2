@@ -69,7 +69,7 @@
         </fieldset>
 
         <div class="button-group-enquiry">        
-            <button type="submit">SEND ENQUIRY</button>
+            <button type="submit">SEND MEMBERSHIP</button>
             <button type="reset" class="clear-btn">Reset Form</button>
         </div>
 

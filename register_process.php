@@ -93,7 +93,7 @@ mysqli_close($conn);
         if (!empty($missing_fields)) {
             echo "<h1>Registration Failed</h1>";
             echo "<p>Please fill in all required fields.</p>";
-            echo "<div class='button-membership-process'><a href='javascript:history.back()'>Go Back</a></div>";
+            echo "<div class='button-membership-process'><a href='register.php'>Go Back</a></div>";
         } else {
     ?>
     <h1>Welcome <?php echo htmlspecialchars($_POST["fname"]); ?>!</h1> 
