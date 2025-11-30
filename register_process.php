@@ -20,6 +20,45 @@ if (!$conn) {
     die("Connection failed: ". mysqli_connect_error());
 }
 
+// Server-side validation
+if ($_SERVER["REQUEST_METHOD"] != "POST") {
+    die("Error: Invalid request method.");
+}
+
+$required_fields = ["fname", "lname", "email", "street", "city", "state", "postcode", "membershipType", "phone", "dob", "participants"];
+$missing_fields = [];
+
+foreach ($required_fields as $field) {
+    if (empty($_POST[$field])) {
+        $missing_fields[] = $field;
+    }
+}
+
+if (!empty($missing_fields)) {
+    echo "<!DOCTYPE html>
+    <html lang='en'>
+    <head>
+        <meta charset='UTF-8'>
+        <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+        <link rel='stylesheet' href='CSS/style.css'>
+        <title>Registration Failed - Root Flower</title>
+    </head>
+    <body>
+        <div class='process'>
+        <div class='processcontainer'>
+        <div class='processcard'>
+            <h1>Registration Failed</h1>
+            <p>Please fill in all required fields.</p>
+            <div class='button-membership-process'><a href='register.php'>Go Back</a></div>
+        </div>
+        </div>
+        </div>
+    </body>
+    </html>";
+    mysqli_close($conn);
+    exit();
+}
+
 // Get user identifier
 $user_identifier = get_user_identifier();
 

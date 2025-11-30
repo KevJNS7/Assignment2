@@ -20,6 +20,45 @@ if (!$conn) {
     die("Connection failed: ". mysqli_connect_error());
 }
 
+// Server-side validation
+if ($_SERVER["REQUEST_METHOD"] != "POST") {
+    die("Error: Invalid request method.");
+}
+
+$required_fields = ["firstname", "lastname", "email", "phonenumber", "address", "city", "contactMethod", "enquiryType", "preferredDate", "priority"];
+$missing_fields = [];
+
+foreach ($required_fields as $field) {
+    if (empty($_POST[$field])) {
+        $missing_fields[] = $field;
+    }
+}
+
+if (!empty($missing_fields)) {
+    echo "<!DOCTYPE html>
+    <html lang='en'>
+    <head>
+        <meta charset='UTF-8'>
+        <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+        <link rel='stylesheet' href='CSS/style.css'>
+        <title>Enquiry Failed - Root Flower</title>
+    </head>
+    <body>
+        <div class='process'>
+        <div class='processcontainer'>
+        <div class='processcard'>
+            <h1>Enquiry Submission Failed</h1>
+            <p>Please fill in all required fields.</p>
+            <div class='button-membership-process'><a href='enquiry.php'>Go Back</a></div>
+        </div>
+        </div>
+        </div>
+    </body>
+    </html>";
+    mysqli_close($conn);
+    exit();
+}
+
 // Get user identifier
 $user_identifier = get_user_identifier();
 
@@ -55,7 +94,7 @@ if (isset($_POST["interests"])) {
 
 $enquiry_type = mysqli_real_escape_string($conn, $_POST["enquiryType"]);
 $preferred_date = mysqli_real_escape_string($conn, $_POST["preferredDate"]);
-$comments = mysqli_real_escape_string($conn, $_POST["comments"]);
+$comments = isset($_POST["comments"]) ? mysqli_real_escape_string($conn, $_POST["comments"]) : "";
 $priority = mysqli_real_escape_string($conn, $_POST["priority"]);
 
 // Insert into database
@@ -149,7 +188,7 @@ mysqli_close($conn);
 
             <tr>
                 <th>Your Message:</th>
-                <td><?php echo htmlspecialchars($_POST["comments"]); ?></td>
+                <td><?php echo !empty($_POST["comments"]) ? htmlspecialchars($_POST["comments"]) : 'N/A'; ?></td>
             </tr>
         </table>
 

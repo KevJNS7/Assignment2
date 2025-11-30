@@ -22,18 +22,16 @@ if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
-$stmt = $conn->prepare("SELECT * FROM membership WHERE id = ?");
-$stmt->bind_param("i", $id);
-$stmt->execute();
-$result = $stmt->get_result();
+$id = mysqli_real_escape_string($conn, $id);
+$sql = "SELECT * FROM membership WHERE id = '$id'";
+$result = mysqli_query($conn, $sql);
 
-if ($result->num_rows === 1) {
-    $membership = $result->fetch_assoc();
+if ($result && mysqli_num_rows($result) === 1) {
+    $membership = mysqli_fetch_assoc($result);
 } else {
     die("Membership record not found");
 }
 
-$stmt->close();
 mysqli_close($conn);
 ?>
 

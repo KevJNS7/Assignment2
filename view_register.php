@@ -88,9 +88,9 @@ mysqli_close($conn);
                             <td><?php echo htmlspecialchars($workshop['email']); ?></td>
                             <td><?php echo htmlspecialchars($workshop['phone'] ?? 'N/A'); ?></td>
                             <td><?php echo htmlspecialchars($workshop['dateofbirth'] ?? 'N/A'); ?></td>
-                            <td><?php echo htmlspecialchars($workshop['interests'] ?? 'N/A'); ?></td>
+                            <td><?php echo !empty($workshop['interests']) ? htmlspecialchars($workshop['interests']) : 'none'; ?></td>
                             <td><?php echo htmlspecialchars($workshop['participants'] ?? 'N/A'); ?></td>
-                            <td><?php echo htmlspecialchars(substr($workshop['comments'] ?? '', 0, 50)); ?></td>
+                            <td><?php echo !empty($workshop['comments']) ? htmlspecialchars(substr($workshop['comments'], 0, 50)) : 'none'; ?></td>
                             <td>
                                 <div class="action-dropdown">
                                     <input type="checkbox" id="action-<?php echo $workshop['id']; ?>" class="action-toggle">

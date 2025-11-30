@@ -22,18 +22,16 @@ if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
-$stmt = $conn->prepare("SELECT * FROM enquiry WHERE id = ?");
-$stmt->bind_param("i", $id);
-$stmt->execute();
-$result = $stmt->get_result();
+$id = mysqli_real_escape_string($conn, $id);
+$sql = "SELECT * FROM enquiry WHERE id = '$id'";
+$result = mysqli_query($conn, $sql);
 
-if ($result->num_rows === 1) {
-    $enquiry = $result->fetch_assoc();
+if ($result && mysqli_num_rows($result) === 1) {
+    $enquiry = mysqli_fetch_assoc($result);
 } else {
     die("Enquiry record not found");
 }
 
-$stmt->close();
 mysqli_close($conn);
 ?>
 

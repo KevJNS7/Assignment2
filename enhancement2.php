@@ -30,13 +30,13 @@
             <div class="enhancement-box">
                 <div class="enh-layout">
                     <div class="enh-text">
-                        <h2>1. Drop Down</h2>
-                        <p>A dropdown menu is a vertical navigation menu that displays a list of options when you click or hover over a horizontal menu item. The menu expands, or "drops down" below the main menu, allowing you to select an option without navigating away from the current page or interface.</p>
+                        <h2>1. User Management Module</h2>
+                        <p>This enhancement give several features for admin to Create, View, Edit and Delete form from the admin panel. </p>
                         <p> You can find this enhancement on:</p>
                         <div class="enhancement-link">
-                            <a href="allproducts.php">Product</a>
-                            <a href="workshop.php">Activities</a>
-                            <a href="register.php">Register</a>
+                            <a href="view_membership.php">View Membership</a>
+                            <a href="view_register.php">View Register</a>
+                            <a href="view_enquiry.php">View Enquiry</a>
                         </div>
                     </div>
                     <div class="enh-references">

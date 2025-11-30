@@ -24,18 +24,16 @@ if (!$conn) {
 }
 
 
-$stmt = $conn->prepare("SELECT * FROM workshop WHERE id = ?");
-$stmt->bind_param("i", $id);
-$stmt->execute();
-$result = $stmt->get_result();
+$id = mysqli_real_escape_string($conn, $id);
+$sql = "SELECT * FROM workshop WHERE id = '$id'";
+$result = mysqli_query($conn, $sql);
 
-if ($result->num_rows === 1) {
-    $workshop = $result->fetch_assoc();
+if ($result && mysqli_num_rows($result) === 1) {
+    $workshop = mysqli_fetch_assoc($result);
 } else {
     die("Workshop record not found");
 }
 
-$stmt->close();
 mysqli_close($conn);
 ?>
 
@@ -94,7 +92,7 @@ mysqli_close($conn);
             </div>
             <div class="detail-info">
                 <span class="detail-label">Interests:</span>
-                <span class="detail-value"><?php echo htmlspecialchars($workshop['interests'] ?? 'N/A'); ?></span>
+                <span class="detail-value"><?php echo !empty($workshop['interests']) ? htmlspecialchars($workshop['interests']) : 'none'; ?></span>
             </div>
             <div class="detail-info">
                 <span class="detail-label">Number of Participants:</span>
@@ -102,7 +100,7 @@ mysqli_close($conn);
             </div>
             <div class="detail-info">
                 <span class="detail-label">Additional Comments:</span>
-                <span class="detail-value"><?php echo htmlspecialchars($workshop['comments'] ?? 'N/A'); ?></span>
+                <span class="detail-value"><?php echo !empty($workshop['comments']) ? htmlspecialchars($workshop['comments']) : 'none'; ?></span>
             </div>
         </div>
         
