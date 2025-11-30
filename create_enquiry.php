@@ -42,32 +42,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             die("Connection failed: " . mysqli_connect_error());
         }
 
-        // Prepare and bind
-        $stmt = $conn->prepare("INSERT INTO enquiry (
+        // Sanitize inputs
+        $firstname = mysqli_real_escape_string($conn, $_POST['firstname']);
+        $lastname = mysqli_real_escape_string($conn, $_POST['lastname']);
+        $email = mysqli_real_escape_string($conn, $_POST['email']);
+        $phonenumber = mysqli_real_escape_string($conn, $_POST['phonenumber']);
+        $enquiry_type = mysqli_real_escape_string($conn, $_POST['enquiry_type']);
+        $priority = mysqli_real_escape_string($conn, $_POST['priority']);
+        $preferred_date = mysqli_real_escape_string($conn, $_POST['preferred_date']);
+        $comments = mysqli_real_escape_string($conn, $_POST['comments']);
+
+        // Insert into database
+        $sql = "INSERT INTO enquiry (
             firstname, lastname, email, phonenumber,
             enquiry_type, priority, preferred_date, comments
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-        
-        $stmt->bind_param(
-            "ssssssss",
-            $_POST['firstname'],
-            $_POST['lastname'],
-            $_POST['email'],
-            $_POST['phonenumber'],
-            $_POST['enquiry_type'],
-            $_POST['priority'],
-            $_POST['preferred_date'],
-            $_POST['comments']
-        );
+        ) VALUES (
+            '$firstname', '$lastname', '$email', '$phonenumber',
+            '$enquiry_type', '$priority', '$preferred_date', '$comments'
+        )";
 
-        // Execute and check success
-        if ($stmt->execute()) {
+        if (mysqli_query($conn, $sql)) {
             $success = true;
         } else {
-            $error = "Error saving enquiry: " . $stmt->error;
+            $error = "Error saving enquiry: " . mysqli_error($conn);
         }
 
-        $stmt->close();
         mysqli_close($conn);
 
         // Redirect after successful submission to prevent resubmission
@@ -84,6 +83,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Root Flower is a flower shop that based on Kuching, Sarawak Malaysia">
+    <meta name="keywords" content="Flower, Root Flower, Kuching, Sarawak, Malaysia">
+    <meta name="author" content="Kevinn Jose, Jiang Yu, Vincent, Ahmed">
     <title>Create Enquiry - Root & Flower</title>
     <link rel="stylesheet" href="CSS/style.css">
 </head>

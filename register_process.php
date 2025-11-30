@@ -44,9 +44,16 @@ $city = mysqli_real_escape_string($conn, $_POST["city"]);
 $state = mysqli_real_escape_string($conn, $_POST["state"]);
 $postcode = mysqli_real_escape_string($conn, $_POST["postcode"]);
 $membershipType = mysqli_real_escape_string($conn, $_POST["membershipType"]);
-$interests = isset($_POST["interests"]) ? implode(", ", array_map(function($item) use ($conn) {
-    return mysqli_real_escape_string($conn, $item);
-}, $_POST["interests"])) : "";
+
+$interests = "";
+if (isset($_POST["interests"])) {
+    $clean_interests = [];
+    foreach ($_POST["interests"] as $val) {
+        $clean_interests[] = mysqli_real_escape_string($conn, $val);
+    }
+    $interests = implode(", ", $clean_interests);
+}
+
 $phone = mysqli_real_escape_string($conn, $_POST["phone"]);
 $dob = mysqli_real_escape_string($conn, $_POST["dob"]);
 $participants = mysqli_real_escape_string($conn, $_POST["participants"]);

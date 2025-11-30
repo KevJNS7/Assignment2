@@ -41,32 +41,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             die("Connection failed: " . mysqli_connect_error());
         }
 
-        // Insert into membership table
-        $stmt1 = $conn->prepare("INSERT INTO membership (
-            firstname, lastname, email, loginID, password
-        ) VALUES (?, ?, ?, ?, ?)");
-        $stmt1->bind_param(
-            "sssss",
-            $_POST['firstname'],
-            $_POST['lastname'],
-            $_POST['email'],
-            $_POST['loginID'],
-            $_POST['password']
-        );
-        $success1 = $stmt1->execute();
-        $stmt1->close();
+        // Sanitize inputs
+        $firstname = mysqli_real_escape_string($conn, $_POST['firstname']);
+        $lastname = mysqli_real_escape_string($conn, $_POST['lastname']);
+        $email = mysqli_real_escape_string($conn, $_POST['email']);
+        $loginID = mysqli_real_escape_string($conn, $_POST['loginID']);
+        $password = mysqli_real_escape_string($conn, $_POST['password']);
 
-        // Insert into user table (role default user)
-        $stmt2 = $conn->prepare("INSERT INTO user (
+        // Insert into membership table
+        $sql1 = "INSERT INTO membership (
+            firstname, lastname, email, loginID, password
+        ) VALUES (
+            '$firstname', '$lastname', '$email', '$loginID', '$password'
+        )";
+
+        // Insert into user table
+        $sql2 = "INSERT INTO user (
             username, password, role
-        ) VALUES (?, ?, 'user')");
-        $stmt2->bind_param(
-            "ss",
-            $_POST['loginID'],
-            $_POST['password']
-        );
-        $success2 = $stmt2->execute();
-        $stmt2->close();
+        ) VALUES (
+            '$loginID', '$password', 'user'
+        )";
+
+        $success1 = mysqli_query($conn, $sql1);
+        $success2 = mysqli_query($conn, $sql2);
 
         mysqli_close($conn);
 
@@ -85,7 +82,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Enquiry - Root & Flower</title>
+    <meta name="description" content="Root Flower is a flower shop that based on Kuching, Sarawak Malaysia">
+    <meta name="keywords" content="Flower, Root Flower, Kuching, Sarawak, Malaysia">
+    <meta name="author" content="Kevinn Jose, Jiang Yu, Vincent, Ahmed">
+    <title>Create Membership - Root & Flower</title>
     <link rel="stylesheet" href="CSS/style.css">
 </head>
 <body>

@@ -44,48 +44,52 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($firstname) || empty($lastname) || empty($email)) {
         $message = "Error: Name and Email are required";
     } else {
-        $stmt = $conn->prepare("UPDATE workshop SET
-            firstname = ?,
-            lastname = ?,
-            email = ?,
-            phone = ?,
-            street = ?,
-            city = ?,
-            state = ?,
-            postcode = ?,
-            dateofbirth = ?,
-            membershiptype = ?,
-            interests = ?,
-            participants = ?,
-            comments = ?
-            WHERE id = ?");
-        
-        $stmt->bind_param(
-            "sssssssssssssi",
-            $firstname, $lastname, $email, $phone, $street, $city, $state,
-            $postcode, $dateofbirth, $membershiptype, $interests, $participants, $comments, $id
-        );
+        $firstname = mysqli_real_escape_string($conn, $firstname);
+        $lastname = mysqli_real_escape_string($conn, $lastname);
+        $email = mysqli_real_escape_string($conn, $email);
+        $phone = mysqli_real_escape_string($conn, $phone);
+        $street = mysqli_real_escape_string($conn, $street);
+        $city = mysqli_real_escape_string($conn, $city);
+        $state = mysqli_real_escape_string($conn, $state);
+        $postcode = mysqli_real_escape_string($conn, $postcode);
+        $dateofbirth = mysqli_real_escape_string($conn, $dateofbirth);
+        $membershiptype = mysqli_real_escape_string($conn, $membershiptype);
+        $interests = mysqli_real_escape_string($conn, $interests);
+        $participants = mysqli_real_escape_string($conn, $participants);
+        $comments = mysqli_real_escape_string($conn, $comments);
 
-        if ($stmt->execute()) {
+        $sql = "UPDATE workshop SET
+            firstname = '$firstname',
+            lastname = '$lastname',
+            email = '$email',
+            phone = '$phone',
+            street = '$street',
+            city = '$city',
+            state = '$state',
+            postcode = '$postcode',
+            dateofbirth = '$dateofbirth',
+            membershiptype = '$membershiptype',
+            interests = '$interests',
+            participants = '$participants',
+            comments = '$comments'
+            WHERE id = $id";
+        
+        if (mysqli_query($conn, $sql)) {
             $message = "Workshop registration updated successfully!";
         } else {
-            $message = "Error updating record: " . $conn->error;
+            $message = "Error updating record: " . mysqli_error($conn);
         }
-        $stmt->close();
     }
 }
 
 // Fetch current workshop data
-$stmt = $conn->prepare("SELECT * FROM workshop WHERE id = ?");
-$stmt->bind_param("i", $id);
-$stmt->execute();
-$result = $stmt->get_result();
+$sql = "SELECT * FROM workshop WHERE id = $id";
+$result = mysqli_query($conn, $sql);
 
-if ($result->num_rows !== 1) {
+if (mysqli_num_rows($result) !== 1) {
     die("Workshop record not found");
 }
-$workshop = $result->fetch_assoc();
-$stmt->close();
+$workshop = mysqli_fetch_assoc($result);
 mysqli_close($conn);
 ?>
 
@@ -94,6 +98,9 @@ mysqli_close($conn);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Root Flower is a flower shop that based on Kuching, Sarawak Malaysia">
+    <meta name="keywords" content="Flower, Root Flower, Kuching, Sarawak, Malaysia">
+    <meta name="author" content="Kevinn Jose, Jiang Yu, Vincent, Ahmed">
     <title>Edit Workshop Registration - Root & Flower</title>
     <link rel="stylesheet" href="CSS/style.css">
 </head>

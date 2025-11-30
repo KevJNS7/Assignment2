@@ -42,48 +42,51 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($firstname) || empty($lastname) || empty($email) || empty($enquiry_type)) {
         $message = "Error: First Name, Last Name, Email, and Enquiry Type are required";
     } else {
-        $stmt = $conn->prepare("UPDATE enquiry SET 
-            firstname = ?, 
-            lastname = ?, 
-            email = ?, 
-            phonenumber = ?, 
-            address = ?,
-            city = ?,
-            contact_method = ?,
-            interests = ?,
-            enquiry_type = ?, 
-            priority = ?, 
-            preferred_date = ?, 
-            comments = ?
-            WHERE id = ?");
-        
-        $stmt->bind_param(
-            "ssssssssssssi",
-            $firstname, $lastname, $email, $phonenumber, $address, $city,
-            $contact_method, $interests, $enquiry_type, $priority, $preferred_date, $comments, $id
-        );
+        $firstname = mysqli_real_escape_string($conn, $firstname);
+        $lastname = mysqli_real_escape_string($conn, $lastname);
+        $email = mysqli_real_escape_string($conn, $email);
+        $phonenumber = mysqli_real_escape_string($conn, $phonenumber);
+        $address = mysqli_real_escape_string($conn, $address);
+        $city = mysqli_real_escape_string($conn, $city);
+        $contact_method = mysqli_real_escape_string($conn, $contact_method);
+        $interests = mysqli_real_escape_string($conn, $interests);
+        $enquiry_type = mysqli_real_escape_string($conn, $enquiry_type);
+        $priority = mysqli_real_escape_string($conn, $priority);
+        $preferred_date = mysqli_real_escape_string($conn, $preferred_date);
+        $comments = mysqli_real_escape_string($conn, $comments);
 
-        if ($stmt->execute()) {
+        $sql = "UPDATE enquiry SET 
+            firstname = '$firstname', 
+            lastname = '$lastname', 
+            email = '$email', 
+            phonenumber = '$phonenumber', 
+            address = '$address',
+            city = '$city',
+            contact_method = '$contact_method',
+            interests = '$interests',
+            enquiry_type = '$enquiry_type', 
+            priority = '$priority', 
+            preferred_date = '$preferred_date', 
+            comments = '$comments'
+            WHERE id = $id";
+        
+        if (mysqli_query($conn, $sql)) {
             $message = "Enquiry updated successfully!";
         } else {
-            $message = "Error updating enquiry: " . $conn->error;
+            $message = "Error updating enquiry: " . mysqli_error($conn);
         }
-        $stmt->close();
     }
 }
 
 // Fetch current enquiry data
-$stmt = $conn->prepare("SELECT * FROM enquiry WHERE id = ?");
-$stmt->bind_param("i", $id);
-$stmt->execute();
-$result = $stmt->get_result();
+$sql = "SELECT * FROM enquiry WHERE id = $id";
+$result = mysqli_query($conn, $sql);
 
-if ($result->num_rows !== 1) {
+if (mysqli_num_rows($result) !== 1) {
     die("Enquiry record not found");
 }
 
-$enquiry = $result->fetch_assoc();
-$stmt->close();
+$enquiry = mysqli_fetch_assoc($result);
 mysqli_close($conn);
 ?>
 
@@ -92,6 +95,9 @@ mysqli_close($conn);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Root Flower is a flower shop that based on Kuching, Sarawak Malaysia">
+    <meta name="keywords" content="Flower, Root Flower, Kuching, Sarawak, Malaysia">
+    <meta name="author" content="Kevinn Jose, Jiang Yu, Vincent, Ahmed">
     <title>Edit Enquiry - Root & Flower</title>
     <link rel="stylesheet" href="CSS/style.css">
 </head>

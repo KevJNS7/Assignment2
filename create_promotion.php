@@ -78,6 +78,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Root Flower is a flower shop that based on Kuching, Sarawak Malaysia">
+    <meta name="keywords" content="Flower, Root Flower, Kuching, Sarawak, Malaysia">
+    <meta name="author" content="Kevinn Jose, Jiang Yu, Vincent, Ahmed">
     <title>Create Promotion - Root & Flower</title>
     <link rel="stylesheet" href="CSS/style.css">
 </head>

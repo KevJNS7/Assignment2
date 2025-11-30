@@ -47,40 +47,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             die("Connection failed: " . mysqli_connect_error());
         }
 
-        // Process interests array
-        $interests = isset($_POST['interests']) ? implode(',', $_POST['interests']) : '';
-
-        // Prepare and bind for workshop table
-        $stmt = $conn->prepare("INSERT INTO workshop (
-            firstname, lastname, email, street, city, state, postcode,
-            membershiptype, interests, phone, dateofbirth, participants, comments
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-
-        $stmt->bind_param(
-            "sssssssssssis",
-            $_POST['firstname'],
-            $_POST['lastname'],
-            $_POST['email'],
-            $_POST['street'],
-            $_POST['city'],
-            $_POST['state'],
-            $_POST['postcode'],
-            $_POST['membershipType'],
-            $interests,
-            $_POST['phone'],
-            $_POST['dob'],
-            $_POST['participants'],
-            $_POST['comments']
-        );
-
-        // Execute and check success
-        if ($stmt->execute()) {
-            $success = true;
-        } else {
-            $error = "Error saving registration: " . $stmt->error;
+        // Sanitize inputs
+        $firstname = mysqli_real_escape_string($conn, $_POST['firstname']);
+        $lastname = mysqli_real_escape_string($conn, $_POST['lastname']);
+        $email = mysqli_real_escape_string($conn, $_POST['email']);
+        $street = mysqli_real_escape_string($conn, $_POST['street']);
+        $city = mysqli_real_escape_string($conn, $_POST['city']);
+        $state = mysqli_real_escape_string($conn, $_POST['state']);
+        $postcode = mysqli_real_escape_string($conn, $_POST['postcode']);
+        $membershipType = mysqli_real_escape_string($conn, $_POST['membershipType']);
+        
+        $interests = "";
+        if (isset($_POST['interests'])) {
+            $clean_interests = [];
+            foreach ($_POST['interests'] as $val) {
+                $clean_interests[] = mysqli_real_escape_string($conn, $val);
+            }
+            $interests = implode(',', $clean_interests);
         }
 
-        $stmt->close();
+        $phone = mysqli_real_escape_string($conn, $_POST['phone']);
+        $dob = mysqli_real_escape_string($conn, $_POST['dob']);
+        $participants = mysqli_real_escape_string($conn, $_POST['participants']);
+        $comments = mysqli_real_escape_string($conn, $_POST['comments']);
+
+        // Insert into database
+        $sql = "INSERT INTO workshop (
+            firstname, lastname, email, street, city, state, postcode,
+            membershiptype, interests, phone, dateofbirth, participants, comments
+        ) VALUES (
+            '$firstname', '$lastname', '$email', '$street', '$city', '$state', '$postcode',
+            '$membershipType', '$interests', '$phone', '$dob', '$participants', '$comments'
+        )";
+
+        if (mysqli_query($conn, $sql)) {
+            $success = true;
+        } else {
+            $error = "Error saving registration: " . mysqli_error($conn);
+        }
+
         mysqli_close($conn);
 
         // Redirect after successful submission to prevent resubmission
@@ -97,6 +102,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Root Flower is a flower shop that based on Kuching, Sarawak Malaysia">
+    <meta name="keywords" content="Flower, Root Flower, Kuching, Sarawak, Malaysia">
+    <meta name="author" content="Kevinn Jose, Jiang Yu, Vincent, Ahmed">
     <title>Create Registration - Root & Flower</title>
     <link rel="stylesheet" href="CSS/style.css">
 </head>

@@ -43,9 +43,16 @@ $phonenumber = mysqli_real_escape_string($conn, $_POST["phonenumber"]);
 $address = mysqli_real_escape_string($conn, $_POST["address"]);
 $city = mysqli_real_escape_string($conn, $_POST["city"]);
 $contact_method = mysqli_real_escape_string($conn, $_POST["contactMethod"]);
-$interests = isset($_POST["interests"]) ? implode(", ", array_map(function($item) use ($conn) {
-    return mysqli_real_escape_string($conn, $item);
-}, $_POST["interests"])) : "";
+
+$interests = "";
+if (isset($_POST["interests"])) {
+    $clean_interests = [];
+    foreach ($_POST["interests"] as $val) {
+        $clean_interests[] = mysqli_real_escape_string($conn, $val);
+    }
+    $interests = implode(", ", $clean_interests);
+}
+
 $enquiry_type = mysqli_real_escape_string($conn, $_POST["enquiryType"]);
 $preferred_date = mysqli_real_escape_string($conn, $_POST["preferredDate"]);
 $comments = mysqli_real_escape_string($conn, $_POST["comments"]);

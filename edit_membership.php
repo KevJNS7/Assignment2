@@ -11,6 +11,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Root Flower is a flower shop that based on Kuching, Sarawak Malaysia">
+    <meta name="keywords" content="Flower, Root Flower, Kuching, Sarawak, Malaysia">
+    <meta name="author" content="Kevinn Jose, Jiang Yu, Vincent, Ahmed">
     <title>Edit Membership - Root & Flower</title>
     <link rel="stylesheet" href="CSS/style.css">
 </head>
@@ -42,16 +45,17 @@
             if (!$conn) {
                 $message = "Database connection failed: " . mysqli_connect_error();
             } else {
-                $stmt = $conn->prepare("UPDATE membership SET firstname=?, lastname=?, email=?, loginID=? WHERE id=?");
-                $stmt->bind_param("ssssi", $firstname, $lastname, $email, $loginID, $id);
-                
-                $membershipUpdated = $stmt->execute();
-                $stmt->close();
+                $firstname = mysqli_real_escape_string($conn, $firstname);
+                $lastname = mysqli_real_escape_string($conn, $lastname);
+                $email = mysqli_real_escape_string($conn, $email);
+                $loginID = mysqli_real_escape_string($conn, $loginID);
+                $oldLoginID = mysqli_real_escape_string($conn, $oldLoginID);
 
-                $stmt2 = $conn->prepare("UPDATE user SET username=? WHERE username=?");
-                $stmt2->bind_param("ss", $loginID, $oldLoginID);
-                $userUpdated = $stmt2->execute();
-                $stmt2->close();
+                $sql1 = "UPDATE membership SET firstname='$firstname', lastname='$lastname', email='$email', loginID='$loginID' WHERE id=$id";
+                $membershipUpdated = mysqli_query($conn, $sql1);
+
+                $sql2 = "UPDATE user SET username='$loginID' WHERE username='$oldLoginID'";
+                $userUpdated = mysqli_query($conn, $sql2);
                 
                 mysqli_close($conn);
                 
@@ -71,13 +75,10 @@
     if (!$conn) {
         $message = "Database connection failed: " . mysqli_connect_error();
     } else {
-        $stmt = $conn->prepare("SELECT id, firstname, lastname, email, loginID FROM membership WHERE id = ?");
-        $stmt->bind_param("i", $id);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        $membership = $result->fetch_assoc();
+        $sql = "SELECT id, firstname, lastname, email, loginID FROM membership WHERE id = $id";
+        $result = mysqli_query($conn, $sql);
+        $membership = mysqli_fetch_assoc($result);
         
-        $stmt->close();
         mysqli_close($conn);
     }
     ?>
