@@ -5,10 +5,12 @@
  * Description: Admin view for membership registrations.
  * Date: 2025
  */
+
 if (basename($_SERVER['PHP_SELF']) == 'view_membership.php') {
     header("Location: adminview.php?page=membership");
     exit();
 }
+
 $servername = "localhost";
 $username = "root";
 $password = "";

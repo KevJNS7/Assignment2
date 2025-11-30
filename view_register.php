@@ -5,6 +5,7 @@
  * Description: Admin view for workshop registrations.
  * Date: 2025
  */
+
 if (basename($_SERVER['PHP_SELF']) == 'view_register.php') {
     header("Location: adminview.php?page=workshop");
     exit();
@@ -44,7 +45,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
     mysqli_close($conn);
 }
 
-
 $conn = mysqli_connect($servername, $username, $password, $dbname);
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
@@ -54,7 +54,6 @@ $result = mysqli_query($conn, $sql);
 $workshops = mysqli_fetch_all($result, MYSQLI_ASSOC);
 mysqli_close($conn);
 ?>
-
 
 <div class="admin-page">
     <div class="page-title-row">

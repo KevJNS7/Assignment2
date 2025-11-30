@@ -22,14 +22,14 @@ $username = "root";
 $password = "";
 $dbname = "Root_Flower";
 
-$message = "";
-
-if (!isset($_GET['id'])) {
-    header("Location: adminview.php?page=promotion");
-    exit();
+if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
+    die("Invalid request: Missing or invalid ID");
 }
 
-$id = $_GET['id'];
+$id = (int)$_GET['id'];
+$promotion = null;
+$message = '';
+
 $conn = mysqli_connect($servername, $username, $password, $dbname);
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
@@ -73,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
         && $imageFileType != "gif" ) {
-            $uploadError = "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+            $uploadError = "Sorry only JPG, JPEG, PNG & GIF files are allowed.";
             $uploadOk = 0;
         }
 

@@ -11,10 +11,10 @@ require_once 'anti_spam.php';
 // Database connection
 $servername = "localhost";
 $username = "root";
-$password = "";
+$db_password = "";
 $dbname = "Root_Flower";
 
-$conn = mysqli_connect($servername, $username, $password, $dbname);
+$conn = mysqli_connect($servername, $username, $db_password, $dbname);
 
 if (!$conn) {
     die("Connection failed: ". mysqli_connect_error());

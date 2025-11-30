@@ -16,7 +16,70 @@ if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) {
     header('Location: index.php');
     exit();
 }
+
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "Root_Flower";
+
+if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
+    die("Invalid request: Missing or invalid ID");
+}
+
+$id = (int)$_GET['id'];
+$membership = null;
+$message = '';
+
+$conn = mysqli_connect($servername, $username, $password, $dbname);
+if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
+}
+
+// Handle form submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
+    $firstname = trim($_POST['firstname'] ?? '');
+    $lastname = trim($_POST['lastname'] ?? '');
+    $email = trim($_POST['email'] ?? '');
+    $loginID = trim($_POST['loginID'] ?? '');
+    $oldLoginID = trim($_POST['old_loginID'] ?? '');
+
+    // Validate required fields
+    if (empty($firstname) || empty($lastname) || empty($email) || empty($loginID)) {
+        $message = "Error: All fields are required!";
+    } else {
+        $stmt1 = $conn->prepare("UPDATE membership SET firstname=?, lastname=?, email=?, loginID=? WHERE id=?");
+        $stmt1->bind_param("ssssi", $firstname, $lastname, $email, $loginID, $id);
+        $membershipUpdated = $stmt1->execute();
+        $stmt1->close();
+
+        $stmt2 = $conn->prepare("UPDATE user SET username=? WHERE username=?");
+        $stmt2->bind_param("ss", $loginID, $oldLoginID);
+        $userUpdated = $stmt2->execute();
+        $stmt2->close();
+        
+        if ($membershipUpdated && $userUpdated) {
+            $message = "Membership updated successfully!";
+        } else {
+            $message = "Error updating membership: " . $conn->error;
+        }
+    }
+}
+
+// Fetch current membership data
+$stmt = $conn->prepare("SELECT * FROM membership WHERE id = ?");
+$stmt->bind_param("i", $id);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows !== 1) {
+    die("Membership record not found");
+}
+
+$membership = $result->fetch_assoc();
+$stmt->close();
+mysqli_close($conn);
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -29,72 +92,6 @@ if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== true) {
     <link rel="stylesheet" href="CSS/style.css">
 </head>
 <body>
-    <?php
-    $servername = "localhost";
-    $username = "root";
-    $password = "";
-    $dbname = "Root_Flower";
-
-    $id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
-    $membership = null;
-    $message = '';
-
-    // Handle form submission
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
-        $id = (int)$_POST['id'];
-        $firstname = trim($_POST['firstname']);
-        $lastname = trim($_POST['lastname']);
-        $email = trim($_POST['email']);
-        $loginID = trim($_POST['loginID']);
-        $oldLoginID = trim($_POST['old_loginID']); // Store old loginID to find user record
-
-        // Validate required fields
-        if (empty($firstname) || empty($lastname) || empty($email) || empty($loginID)) {
-            $message = "All fields are required!";
-        } else {
-            $conn = mysqli_connect($servername, $username, $password, $dbname);
-            if (!$conn) {
-                $message = "Database connection failed: " . mysqli_connect_error();
-            } else {
-                $stmt1 = $conn->prepare("UPDATE membership SET firstname=?, lastname=?, email=?, loginID=? WHERE id=?");
-                $stmt1->bind_param("ssssi", $firstname, $lastname, $email, $loginID, $id);
-                $membershipUpdated = $stmt1->execute();
-                $stmt1->close();
-
-                $stmt2 = $conn->prepare("UPDATE user SET username=? WHERE username=?");
-                $stmt2->bind_param("ss", $loginID, $oldLoginID);
-                $userUpdated = $stmt2->execute();
-                $stmt2->close();
-                
-                mysqli_close($conn);
-                
-                if ($membershipUpdated && $userUpdated) {
-                    $message = "Membership and User account updated successfully! Login ID changed to: " . htmlspecialchars($loginID);
-                } elseif ($membershipUpdated) {
-                    $message = "Membership updated, but User table update failed or user not found.";
-                } else {
-                    $message = "Error updating membership.";
-                }
-            }
-        }
-    }
-
-    // Fetch current membership data
-    $conn = mysqli_connect($servername, $username, $password, $dbname);
-    if (!$conn) {
-        $message = "Database connection failed: " . mysqli_connect_error();
-    } else {
-        $stmt = $conn->prepare("SELECT id, firstname, lastname, email, loginID FROM membership WHERE id = ?");
-        $stmt->bind_param("i", $id);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        $membership = $result->fetch_assoc();
-        $stmt->close();
-        
-        mysqli_close($conn);
-    }
-    ?>
-
     <div class="view-edit-container">
         <?php if ($membership): ?>
             <h1 class="page-title">Edit Membership</h1>

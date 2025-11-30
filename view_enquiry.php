@@ -43,10 +43,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
 
     mysqli_query($conn, "ALTER TABLE enquiry AUTO_INCREMENT = " . $newId);
     mysqli_close($conn);
-    
-    // Redirect to avoid form resubmission
-    header("Location: view_enquiry.php");
-    exit;
 }
 
 $conn = mysqli_connect($servername, $username, $password, $dbname);

@@ -21,7 +21,6 @@ $error = "";
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Validate required fields
     $requiredFields = [
         'firstname', 'lastname', 'email', 'street', 'city', 
         'state', 'postcode', 'phone', 'dob', 'participants'
@@ -33,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // Check if at least one membership type is selected
+    // Check at least one membership is selected
     if (empty($_POST['membershipType'])) {
         $missingFields[] = 'membershipType';
     }
@@ -41,7 +40,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!empty($missingFields)) {
         $error = "Please fill in all required fields: " . implode(', ', $missingFields);
     } else {
-        // Connect to database
         $conn = mysqli_connect($servername, $username, $password, $dbname);
         if (!$conn) {
             die("Connection failed: " . mysqli_connect_error());

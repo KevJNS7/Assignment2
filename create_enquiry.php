@@ -21,7 +21,6 @@ $error = "";
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Validate required fields
     $requiredFields = [
         'firstname', 'lastname', 'email', 'phonenumber',
         'enquiry_type', 'priority', 'preferred_date', 'comments'
@@ -36,7 +35,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!empty($missingFields)) {
         $error = "Please fill in all required fields: " . implode(', ', $missingFields);
     } else {
-        // Connect to database
         $conn = mysqli_connect($servername, $username, $password, $dbname);
         if (!$conn) {
             die("Connection failed: " . mysqli_connect_error());

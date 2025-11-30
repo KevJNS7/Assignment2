@@ -21,7 +21,6 @@ $error = "";
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Validate required fields
     $requiredFields = [
         'firstname', 'lastname', 'email', 'loginID', 'password'
     ];
@@ -35,7 +34,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!empty($missingFields)) {
         $error = "Please fill in all required fields: " . implode(', ', $missingFields);
     } else {
-        // Connect to database
         $conn = mysqli_connect($servername, $username, $password, $dbname);
         if (!$conn) {
             die("Connection failed: " . mysqli_connect_error());
@@ -57,9 +55,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Insert into user table
         $sql2 = "INSERT INTO user (
-            username, password, role
+            username, password
         ) VALUES (
-            '$loginID', '$password', 'user'
+            '$loginID', '$password'
         )";
 
         $success1 = mysqli_query($conn, $sql1);

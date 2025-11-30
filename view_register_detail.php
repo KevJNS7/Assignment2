@@ -29,12 +29,10 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 $id = (int)$_GET['id'];
 $workshop = null;
 
-
 $conn = mysqli_connect($servername, $username, $password, $dbname);
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
-
 
 $stmt = $conn->prepare("SELECT * FROM workshop WHERE id = ?");
 $stmt->bind_param("i", $id);

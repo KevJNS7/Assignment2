@@ -71,7 +71,7 @@ function record_submission($identifier, $form_type, $conn) {
     $submission_count = $row['submission_count'];
     
     // Block if limit reached
-    if ($submission_count >= 10) {
+    if ($submission_count >= 5) {
         // Block for 10 minutes
         $block_sql = "INSERT INTO spam_blocks (user_identifier, reason, block_until) 
                       VALUES ('$identifier', 
@@ -81,7 +81,7 @@ function record_submission($identifier, $form_type, $conn) {
         
         return [
             'allowed' => false,
-            'message' => "You have exceeded the submission limit (10 submissions per 10 minutes). You have been temporarily blocked."
+            'message' => "You have exceeded the submission limit (5 submissions per 10 minutes). You have been temporarily blocked."
         ];
     }
     
@@ -90,7 +90,7 @@ function record_submission($identifier, $form_type, $conn) {
                 VALUES ('$identifier', '$form_type')";
     mysqli_query($conn, $log_sql);
     
-    $remaining = 10 - ($submission_count + 1);
+    $remaining = 5 - ($submission_count + 1);
     $message = '';
     
     if ($remaining == 2) {

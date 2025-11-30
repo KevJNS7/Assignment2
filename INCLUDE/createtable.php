@@ -40,7 +40,7 @@ $sqli2 = "CREATE TABLE IF NOT EXISTS workshop (
     interests TEXT,
     phone VARCHAR(20) NOT NULL,
     dateofbirth DATE NOT NULL,
-    participants INT NOT NULL,
+    participants INT(4) NOT NULL,
     comments TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 )";
