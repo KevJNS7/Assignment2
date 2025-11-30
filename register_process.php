@@ -79,9 +79,6 @@ mysqli_close($conn);
 </head>
 
 <body>
-    <!-- Navigation bar -->
-    <?php include("INCLUDE/navigation.php"); ?>
-
     <div class="process">
     <div class="processcontainer">
     <div class="processcard">
@@ -192,8 +189,5 @@ mysqli_close($conn);
     </div>
     </div>
     </div>
-
-    <!-- Footer -->
-    <?php include("INCLUDE/footer.php"); ?>
 </body>
 </html>

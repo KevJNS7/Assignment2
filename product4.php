@@ -31,106 +31,31 @@
             </div>
             
             <?php
-            // Array of all products
-            $products = [
-                // Graduation
-                [
-                    'name' => 'Graduation Bouquet',
-                    'img' => 'IMAGE/graduation1.jpg',
-                    'desc' => 'Graduation Bouquet with premium sunflower',
-                    'type' => 'Premium Sunflower',
-                    'delivery' => 'Same day available',
-                    'current_price' => 'RM47.50',
-                    'original_price' => 'RM50.00',
-                    'discount' => '5%'
-                ],
-                [
-                    'name' => 'Graduation Bouquet',
-                    'img' => 'IMAGE/graduation2.jpg',
-                    'desc' => 'Graduation Bouquet with premium pompom chrysanthemum',
-                    'type' => 'Premium chrysanthemum',
-                    'delivery' => 'Same day available',
-                    'current_price' => 'RM38.00',
-                    'original_price' => 'RM40.00',
-                    'discount' => '5%'
-                ],
-                [
-                    'name' => 'Graduation Bouquet',
-                    'img' => 'IMAGE/graduation3.jpg',
-                    'desc' => 'Graduation Bouquet with premium baby\'s breath flowers',
-                    'type' => 'Baby\'s breath flowers',
-                    'delivery' => 'Same day available',
-                    'current_price' => 'RM60.00',
-                    'original_price' => 'RM63.00',
-                    'discount' => '5%'
-                ],
-                [
-                    'name' => 'Graduation Bouquet',
-                    'img' => 'IMAGE/graduation4.jpg',
-                    'desc' => 'Graduation Bouquet with premium dyed baby\'s breath flowers',
-                    'type' => 'Premium baby\'s breath flowers',
-                    'delivery' => 'Same day available',
-                    'current_price' => 'RM62.70',
-                    'original_price' => 'RM66.00',
-                    'discount' => '5%'
-                ],
-                [
-                    'name' => 'Graduation Bouquet',
-                    'img' => 'IMAGE/graduation5.jpg',
-                    'desc' => 'Graduation Bouquet with premium sunflower and baby\'s breath flowers',
-                    'type' => 'Premium sunflower',
-                    'delivery' => 'Same day available',
-                    'current_price' => 'RM49.40',
-                    'original_price' => 'RM52.00',
-                    'discount' => '5%'
-                ],
-                [
-                    'name' => 'Graduation Bouquet',
-                    'img' => 'IMAGE/graduation6.jpg',
-                    'desc' => 'Graduation Bouquet with premium pompom chrysanthemum',
-                    'type' => 'Premium chrysanthemum',
-                    'delivery' => 'Same day available',
-                    'current_price' => 'RM50.35',
-                    'original_price' => 'RM53.00',
-                    'discount' => '5%'
-                ],
-                [
-                    'name' => 'Graduation Bouquet',
-                    'img' => 'IMAGE/graduation7.jpg',
-                    'desc' => 'Graduation 7 with premium pink chrysanthemum',
-                    'type' => 'Premium pink chrysanthemum',
-                    'delivery' => 'Same day available',
-                    'current_price' => 'RM51.30',
-                    'original_price' => 'RM54.00',
-                    'discount' => '5%'
-                ],
-                [
-                    'name' => 'Graduation Bouquet',
-                    'img' => 'IMAGE/graduation8.jpg',
-                    'desc' => 'Graduation Bouquet with premium sunflower',
-                    'type' => 'Premium sunflower',
-                    'delivery' => 'Same day available',
-                    'current_price' => 'RM55.70',
-                    'original_price' => 'RM58.65',
-                    'discount' => '5%'
-                ]
-            ];
+            $servername = "localhost";
+            $username = "root";
+            $password = "";
+            $dbname = "Root_Flower";
 
-            // Search Keyword
-            $keyword = isset($_GET['keyword']) ? strtolower(trim($_GET['keyword'])) : '';
-
-            // Product Filter
-            $filtered = [];
-            foreach ($products as $product) {
-                if ($keyword === '' ||
-                    strpos(strtolower($product['name']), $keyword) !== false ||
-                    strpos(strtolower($product['type']), $keyword) !== false ||
-                    strpos(strtolower($product['desc']), $keyword) !== false ||
-                    strpos(strtolower($product['current_price']), $keyword) !== false
-                ) {
-                    $filtered[] = $product;
-                }
+            $conn = mysqli_connect($servername, $username, $password, $dbname);
+            if (!$conn) {
+                die("Connection failed: " . mysqli_connect_error());
             }
+
+            $keyword = isset($_GET['keyword']) ? mysqli_real_escape_string($conn, trim($_GET['keyword'])) : '';
+
+            if ($keyword !== '') {
+                $sql = "SELECT * FROM products WHERE 
+                        category = 'Graduation' AND (
+                        name LIKE '%$keyword%' OR 
+                        type LIKE '%$keyword%' OR 
+                        description LIKE '%$keyword%' OR
+                        current_price LIKE '%$keyword%')
+                        ORDER BY created_at DESC";
+            } else {
+                $sql = "SELECT * FROM products WHERE category = 'Graduation' ORDER BY created_at DESC";
+            }
+
+            $result = mysqli_query($conn, $sql);
             ?>
 
             <form method="get" action="" class="search-form modern-search-form">
@@ -139,15 +64,15 @@
             </form>
 
             <div class="product-grid">
-            <?php if (count($filtered) === 0): ?>
+            <?php if (mysqli_num_rows($result) === 0): ?>
                 <p>No products found.</p>
             <?php else: ?>
-                <?php foreach ($filtered as $product): ?>
+                <?php while ($product = mysqli_fetch_assoc($result)): ?>
                 <div class="product-card">
                     <div class="discount-badge"><p><?php echo htmlspecialchars($product['discount']); ?></p></div>
                     <figure>
-                        <img src="<?php echo htmlspecialchars($product['img']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>" class="product-img">
-                        <figcaption><?php echo htmlspecialchars($product['desc']); ?></figcaption>
+                        <img src="<?php echo htmlspecialchars($product['image']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>" class="product-img">
+                        <figcaption><?php echo htmlspecialchars($product['description']); ?></figcaption>
                     </figure>
                     <h3 class="product-name"><?php echo htmlspecialchars($product['name']); ?></h3>
                     <dl class="product-specs">
@@ -170,7 +95,7 @@
                         <button class="btn quick-view"><img src="IMAGE/view2.svg" alt="view"> </button>
                     </div>
                 </div>
-                <?php endforeach; ?>
+                <?php endwhile; ?>
             <?php endif; ?>
             </div>
         </section>
@@ -184,6 +109,8 @@
     <?php include("INCLUDE/footer.php"); ?>
 
     <?php include("INCLUDE/profileicon.php"); ?>
+    
+    <?php mysqli_close($conn); ?>
 </body>
 </html>
     

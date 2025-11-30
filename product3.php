@@ -31,106 +31,31 @@
             </div>
             
             <?php
-            // Array of all products
-            $products = [
-                // Grand Opening
-                [
-                    'name' => 'Grand Opening Flowers',
-                    'img' => 'IMAGE/grandopening1.jpg',
-                    'desc' => 'Opening Flower Stands with premium sunflower',
-                    'type' => 'Premium sunflower',
-                    'delivery' => 'Same day available',
-                    'current_price' => 'RM57.00',
-                    'original_price' => 'RM60.00',
-                    'discount' => '5%'
-                ],
-                [
-                    'name' => 'Grand Opening Flowers',
-                    'img' => 'IMAGE/grandopening2.jpg',
-                    'desc' => 'Opening Flower Stands with premium flowers',
-                    'type' => 'Premium flowers',
-                    'delivery' => 'Same day available',
-                    'current_price' => 'RM62.70',
-                    'original_price' => 'RM66.00',
-                    'discount' => '5%'
-                ],
-                [
-                    'name' => 'Grand Opening Basket',
-                    'img' => 'IMAGE/grandopening3.jpg',
-                    'desc' => 'Opening Flower Stands with premium flowers',
-                    'type' => 'Premium flowers',
-                    'delivery' => 'Same day available',
-                    'current_price' => 'RM43.70',
-                    'original_price' => 'RM46.00',
-                    'discount' => '5%'
-                ],
-                [
-                    'name' => 'Grand Opening Stands',
-                    'img' => 'IMAGE/grandopening4.jpg',
-                    'desc' => 'Opening Flower Stands with premium flowers',
-                    'type' => 'Premium flowers',
-                    'delivery' => 'Same day available',
-                    'current_price' => 'RM59.00',
-                    'original_price' => 'RM62.00',
-                    'discount' => '5%'
-                ],
-                [
-                    'name' => 'Grand Opening Stands',
-                    'img' => 'IMAGE/grandopening5.jpg',
-                    'desc' => 'Grand Opening Stands with premium flowers',
-                    'type' => 'Premium flowers',
-                    'delivery' => 'Same day available',
-                    'current_price' => 'RM53.40',
-                    'original_price' => 'RM56.25',
-                    'discount' => '5%'
-                ],
-                [
-                    'name' => 'Grand Opening Basket',
-                    'img' => 'IMAGE/grandopening6.jpg',
-                    'desc' => 'Grand Opening Basket with premium flowers',
-                    'type' => 'Premium flowers',
-                    'delivery' => 'Same day available',
-                    'current_price' => 'RM36.60',
-                    'original_price' => 'RM38.50',
-                    'discount' => '5%'
-                ],
-                [
-                    'name' => 'Grand Opening Basket',
-                    'img' => 'IMAGE/grandopening7.jpg',
-                    'desc' => 'Grand Opening Basket with premium flowers',
-                    'type' => 'Premium flowers',
-                    'delivery' => 'Same day available',
-                    'current_price' => 'RM36.50',
-                    'original_price' => 'RM38.40',
-                    'discount' => '5%'
-                ],
-                [
-                    'name' => 'Grand Opening Basket',
-                    'img' => 'IMAGE/grandopening8.jpg',
-                    'desc' => 'Grand Opening Basket with premium flowers',
-                    'type' => 'Premium flowers',
-                    'delivery' => 'Same day available',
-                    'current_price' => 'RM32.80',
-                    'original_price' => 'RM34.50',
-                    'discount' => '5%'
-                ]
-            ];
+            $servername = "localhost";
+            $username = "root";
+            $password = "";
+            $dbname = "Root_Flower";
 
-            // Search Keyword
-            $keyword = isset($_GET['keyword']) ? strtolower(trim($_GET['keyword'])) : '';
-
-            // Product Filter
-            $filtered = [];
-            foreach ($products as $product) {
-                if ($keyword === '' ||
-                    strpos(strtolower($product['name']), $keyword) !== false ||
-                    strpos(strtolower($product['type']), $keyword) !== false ||
-                    strpos(strtolower($product['desc']), $keyword) !== false ||
-                    strpos(strtolower($product['current_price']), $keyword) !== false
-                ) {
-                    $filtered[] = $product;
-                }
+            $conn = mysqli_connect($servername, $username, $password, $dbname);
+            if (!$conn) {
+                die("Connection failed: " . mysqli_connect_error());
             }
+
+            $keyword = isset($_GET['keyword']) ? mysqli_real_escape_string($conn, trim($_GET['keyword'])) : '';
+
+            if ($keyword !== '') {
+                $sql = "SELECT * FROM products WHERE 
+                        category = 'Grand-Opening' AND (
+                        name LIKE '%$keyword%' OR 
+                        type LIKE '%$keyword%' OR 
+                        description LIKE '%$keyword%' OR
+                        current_price LIKE '%$keyword%')
+                        ORDER BY created_at DESC";
+            } else {
+                $sql = "SELECT * FROM products WHERE category = 'Grand-Opening' ORDER BY created_at DESC";
+            }
+
+            $result = mysqli_query($conn, $sql);
             ?>
 
             <form method="get" action="" class="search-form modern-search-form">
@@ -139,15 +64,15 @@
             </form>
 
             <div class="product-grid">
-            <?php if (count($filtered) === 0): ?>
+            <?php if (mysqli_num_rows($result) === 0): ?>
                 <p>No products found.</p>
             <?php else: ?>
-                <?php foreach ($filtered as $product): ?>
+                <?php while ($product = mysqli_fetch_assoc($result)): ?>
                 <div class="product-card">
                     <div class="discount-badge"><p><?php echo htmlspecialchars($product['discount']); ?></p></div>
                     <figure>
-                        <img src="<?php echo htmlspecialchars($product['img']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>" class="product-img">
-                        <figcaption><?php echo htmlspecialchars($product['desc']); ?></figcaption>
+                        <img src="<?php echo htmlspecialchars($product['image']); ?>" alt="<?php echo htmlspecialchars($product['name']); ?>" class="product-img">
+                        <figcaption><?php echo htmlspecialchars($product['description']); ?></figcaption>
                     </figure>
                     <h3 class="product-name"><?php echo htmlspecialchars($product['name']); ?></h3>
                     <dl class="product-specs">
@@ -170,8 +95,9 @@
                         <button class="btn quick-view"><img src="IMAGE/view2.svg" alt="view"> </button>
                     </div>
                 </div>
-                <?php endforeach; ?>
+                <?php endwhile; ?>
             <?php endif; ?>
+            <?php mysqli_close($conn); ?>
             </div>
         </section>
 

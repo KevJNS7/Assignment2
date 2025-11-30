@@ -88,7 +88,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="admin-page">
         <div class="page-title-row">
             <h1 class="page-title">Create New Promotion</h1>
-            <a href="adminview.php?page=promotion" class="back-btn">← Back to List</a>
         </div>
 
         <?php if (!empty($error)): ?>

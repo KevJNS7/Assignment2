@@ -95,6 +95,22 @@ $sqli7 = "CREATE TABLE IF NOT EXISTS promotions (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 )";
 
+$sqli8 = "CREATE TABLE IF NOT EXISTS products (
+    id INT(6) AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    image VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL,
+    type VARCHAR(50) NOT NULL,
+    delivery VARCHAR(100) NOT NULL,
+    current_price VARCHAR(20) NOT NULL,
+    original_price VARCHAR(20) NOT NULL,
+    discount VARCHAR(10) NOT NULL,
+    category VARCHAR(50) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_category (category),
+    INDEX idx_name (name)
+)";
+
 mysqli_query($conn, $sql1);
 mysqli_query($conn, $sqli2);
 mysqli_query($conn, $sqli3);
@@ -102,6 +118,7 @@ mysqli_query($conn, $sqli4);
 mysqli_query($conn, $sqli5);
 mysqli_query($conn, $sqli6);
 mysqli_query($conn, $sqli7);
+mysqli_query($conn, $sqli8);
 mysqli_close($conn);
 ?>
 
@@ -130,6 +147,76 @@ if ($conn) {
                 $title = mysqli_real_escape_string($conn, $promo[1]);
                 $desc = mysqli_real_escape_string($conn, $promo[2]);
                 $sql_insert = "INSERT INTO promotions (image, title, description) VALUES ('$img', '$title', '$desc')";
+                mysqli_query($conn, $sql_insert);
+            }
+        }
+    }
+    mysqli_close($conn);
+}
+?>
+
+<?php
+// Insert default data for products
+$conn = mysqli_connect($servername, $username, $password, $dbname);
+
+if ($conn) {
+    $check_products = "SELECT count(*) as count FROM products";
+    $result_products = mysqli_query($conn, $check_products);
+    if ($result_products) {
+        $row_products = mysqli_fetch_assoc($result_products);
+
+        if ($row_products['count'] == 0) {
+            $products = [
+                ['Mix Flowers Bouquet', 'IMAGE/hb1.jpg', 'Mix Handtied Flowers Bouquet with premium fresh flowers', 'Premium flowers', 'Same day available', 'RM42.75', 'RM45.00', '-5%', 'Handtied-Bouquet'],
+                ['Bridal Bouquet', 'IMAGE/hb2.jpg', 'Bridal ROM Bouquet with premium flowers', 'Premium flowers', 'Same day available', 'RM47.50', 'RM50.00', '5%', 'Handtied-Bouquet'],
+                ['Roses Bouquet', 'IMAGE/hb3.jpg', 'Roses Bouquet with premium roses', 'Premium roses', 'Same day available', 'RM45.60', 'RM48.00', '5%', 'Handtied-Bouquet'],
+                ['Gerbera Mix', 'IMAGE/hb4.jpg', 'Gerbera Mix Bouquet with premium daisy', 'Premium daisy', 'Same day available', 'RM39.90', 'RM42.00', '5%', 'Handtied-Bouquet'],
+                ['Soap Roses Bouquet', 'IMAGE/hb5.jpg', 'Soap Roses Bouquet with premium roses', 'Premium roses', 'Same day available', 'RM38.00', 'RM40.00', '5%', 'Handtied-Bouquet'],
+                ['Bridal Bouquet', 'IMAGE/hb6.jpg', 'Bridal ROM Bouquet with premium flowers', 'Premium flowers', 'Same day available', 'RM46.55', 'RM49.00', '5%', 'Handtied-Bouquet'],
+                ['Cry Baby Bouquet', 'IMAGE/hb7.jpg', 'Cry Baby Bouquet with premium flowers', 'Premium flowers', 'Same day available', 'RM44.65', 'RM47.00', '5%', 'Handtied-Bouquet'],
+                ['Sunflower Bouquet', 'IMAGE/hb8.jpg', 'Sunflower Bouquet with premium sunflowers', 'Premium sunflowers', 'Same day available', 'RM40.85', 'RM43.00', '-5%', 'Handtied-Bouquet'],
+                
+                ['CNY Flowers', 'IMAGE/cny1.jpg', 'CNY Flowers with premium FLOWER', 'Premium flowers', 'Same day available', 'RM59.85', 'RM63.00', '5%', 'CNY-Flowers'],
+                ['CNY Flowers', 'IMAGE/cny2.jpg', 'CNY Flowers with premium flowers', 'Premium flowers', 'Same day available', 'RM52.25', 'RM55.00', '5%', 'CNY-Flowers'],
+                ['CNY Flowers', 'IMAGE/cny3.jpg', 'CNY flowers with premium flowers', 'Premium flowers', 'Same day available', 'RM66.50', 'RM70.00', '5%', 'CNY-Flowers'],
+                ['CNY Flowers', 'IMAGE/cny4.jpg', 'CNY flowers with premium flowers', 'Premium flowers', 'Same day available', 'RM52.50', 'RM55.00', '5%', 'CNY-Flowers'],
+                ['CNY Flowers', 'IMAGE/cny5.jpg', 'CNY Flowers with premium flowers', 'Premium flowers', 'Same day available', 'RM61.75', 'RM65.00', '5%', 'CNY-Flowers'],
+                ['CNY Flowers', 'IMAGE/cny6.jpg', 'CNY Flowers with premium flowers', 'Premium flowers', 'Same day available', 'RM52.75', 'RM55.50', '5%', 'CNY-Flowers'],
+                ['CNY Flowers', 'IMAGE/cny7.jpg', 'CNY Flowers with premium flowers', 'Premium flowers', 'Same day available', 'RM42.75', 'RM45.00', '5%', 'CNY-Flowers'],
+                ['CNY Flowers', 'IMAGE/cny8.jpg', 'CNY Flowers with premium flowers', 'Premium flowers', 'Same day available', 'RM38.00', 'RM40.00', '5%', 'CNY-Flowers'],
+                
+                ['Grand Opening Flowers', 'IMAGE/grandopening1.jpg', 'Opening Flower Stands with premium sunflower', 'Premium sunflower', 'Same day available', 'RM57.00', 'RM60.00', '5%', 'Grand-Opening'],
+                ['Grand Opening Flowers', 'IMAGE/grandopening2.jpg', 'Opening Flower Stands with premium flowers', 'Premium flowers', 'Same day available', 'RM62.70', 'RM66.00', '5%', 'Grand-Opening'],
+                ['Grand Opening Basket', 'IMAGE/grandopening3.jpg', 'Opening Flower Stands with premium flowers', 'Premium flowers', 'Same day available', 'RM43.70', 'RM46.00', '5%', 'Grand-Opening'],
+                ['Grand Opening Stands', 'IMAGE/grandopening4.jpg', 'Opening Flower Stands with premium flowers', 'Premium flowers', 'Same day available', 'RM59.00', 'RM62.00', '5%', 'Grand-Opening'],
+                ['Grand Opening Stands', 'IMAGE/grandopening5.jpg', 'Grand Opening Stands with premium flowers', 'Premium flowers', 'Same day available', 'RM53.40', 'RM56.25', '5%', 'Grand-Opening'],
+                ['Grand Opening Basket', 'IMAGE/grandopening6.jpg', 'Grand Opening Basket with premium flowers', 'Premium flowers', 'Same day available', 'RM36.60', 'RM38.50', '5%', 'Grand-Opening'],
+                ['Grand Opening Basket', 'IMAGE/grandopening7.jpg', 'Grand Opening Basket with premium flowers', 'Premium flowers', 'Same day available', 'RM36.50', 'RM38.40', '5%', 'Grand-Opening'],
+                ['Grand Opening Basket', 'IMAGE/grandopening8.jpg', 'Grand Opening Basket with premium flowers', 'Premium flowers', 'Same day available', 'RM32.80', 'RM34.50', '5%', 'Grand-Opening'],
+                
+                ['Graduation Bouquet', 'IMAGE/graduation1.jpg', 'Graduation Bouquet with premium sunflower', 'Premium Sunflower', 'Same day available', 'RM47.50', 'RM50.00', '5%', 'Graduation'],
+                ['Graduation Bouquet', 'IMAGE/graduation2.jpg', 'Graduation Bouquet with premium pompom chrysanthemum', 'Premium chrysanthemum', 'Same day available', 'RM38.00', 'RM40.00', '5%', 'Graduation'],
+                ['Graduation Bouquet', 'IMAGE/graduation3.jpg', 'Graduation Bouquet with premium baby\'s breath flowers', 'Baby\'s breath flowers', 'Same day available', 'RM60.00', 'RM63.00', '5%', 'Graduation'],
+                ['Graduation Bouquet', 'IMAGE/graduation4.jpg', 'Graduation Bouquet with premium dyed baby\'s breath flowers', 'Premium baby\'s breath flowers', 'Same day available', 'RM62.70', 'RM66.00', '5%', 'Graduation'],
+                ['Graduation Bouquet', 'IMAGE/graduation5.jpg', 'Graduation Bouquet with premium sunflower and baby\'s breath flowers', 'Premium sunflower', 'Same day available', 'RM49.40', 'RM52.00', '5%', 'Graduation'],
+                ['Graduation Bouquet', 'IMAGE/graduation6.jpg', 'Graduation Bouquet with premium pompom chrysanthemum', 'Premium chrysanthemum', 'Same day available', 'RM50.35', 'RM53.00', '5%', 'Graduation'],
+                ['Graduation Bouquet', 'IMAGE/graduation7.jpg', 'Graduation 7 with premium pink chrysanthemum', 'Premium pink chrysanthemum', 'Same day available', 'RM51.30', 'RM54.00', '5%', 'Graduation'],
+                ['Graduation Bouquet', 'IMAGE/graduation8.jpg', 'Graduation Bouquet with premium sunflower', 'Premium sunflower', 'Same day available', 'RM55.70', 'RM58.65', '5%', 'Graduation']
+            ];
+
+            foreach ($products as $product) {
+                $name = mysqli_real_escape_string($conn, $product[0]);
+                $img = mysqli_real_escape_string($conn, $product[1]);
+                $desc = mysqli_real_escape_string($conn, $product[2]);
+                $type = mysqli_real_escape_string($conn, $product[3]);
+                $delivery = mysqli_real_escape_string($conn, $product[4]);
+                $current_price = mysqli_real_escape_string($conn, $product[5]);
+                $original_price = mysqli_real_escape_string($conn, $product[6]);
+                $discount = mysqli_real_escape_string($conn, $product[7]);
+                $category = mysqli_real_escape_string($conn, $product[8]);
+                
+                $sql_insert = "INSERT INTO products (name, image, description, type, delivery, current_price, original_price, discount, category) 
+                              VALUES ('$name', '$img', '$desc', '$type', '$delivery', '$current_price', '$original_price', '$discount', '$category')";
                 mysqli_query($conn, $sql_insert);
             }
         }

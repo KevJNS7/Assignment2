@@ -18,13 +18,12 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
     
     // Automatic fill the form if user already login
     if ($conn) {
-        $loginID = $_SESSION['username'];
-        $stmt = $conn->prepare("SELECT firstname, lastname, email FROM membership WHERE loginID = ?");
-        $stmt->bind_param("s", $loginID);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        $userData = $result->fetch_assoc();
-        $stmt->close();
+        $loginID = mysqli_real_escape_string($conn, $_SESSION['username']);
+        $sql = "SELECT firstname, lastname, email FROM membership WHERE loginID = '$loginID'";
+        $result = mysqli_query($conn, $sql);
+        if ($result && mysqli_num_rows($result) > 0) {
+            $userData = mysqli_fetch_assoc($result);
+        }
         mysqli_close($conn);
     }
 }
