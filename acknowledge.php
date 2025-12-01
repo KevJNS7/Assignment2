@@ -71,6 +71,13 @@
                 <li>Coding with Russ: <a href="https://www.youtube.com/watch?v=NCLdf661ILE">Youtube- Coding with Russ</a></li>
                 <li>Coding with Talha: <a href="https://youtube.com/shorts/UYZW5Upwrt0?si=aPUfd-jHZuDNh3kv">Youtube - Coding with Talha</a></li>
                 <li>dcode: <a href="https://youtu.be/COs0-6G62vY?si=2FXyGo_DVf9LoWii">Youtube - dcode</a></li>
+                <li>GeeksForGeeks: <a href="https://www.geeksforgeeks.org/php/creating-a-registration-and-login-system-with-php-and-mysql/">GeeksForGeeks PHP & MySQL</a></li>
+                <li>GeeksForGeeks: <a href="https://www.geeksforgeeks.org/php/how-to-fetch-data-from-the-database-in-php/">GeeksForGeeks Database</a></li>
+                <li>Sling Academy: <a href="https://www.slingacademy.com/article/implement-search-by-keyword-php-mysql/">Sling Academy PHP & MySQL</a></li>
+                <li>W3Schools: <a href="https://www.w3schools.com/PHP/php_mysql_create.asp.">W3Schools PHP & MySQL</a></li>
+                <li>Sharma Coder: <a href="https://www.youtube.com/watch?v=bxe1Vgub2dw&list=PL_99hMDlL4d0iIf0aji2kc4_e8VleaFw2">Youtube - Sharma Coder</a></li>
+                
+            </ul>
             </ul>
         </div>
     </section>

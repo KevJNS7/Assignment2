@@ -86,7 +86,7 @@ mysqli_close($conn);
                                     <label for="action-<?php echo $promo['id']; ?>" class="action-btn">⋮</label>
                                     <div class="dropdown-menu">
                                         <a href="edit_promotion.php?id=<?php echo $promo['id']; ?>" class="dropdown-item edit-btn">Edit</a>
-                                        <form method="POST" action="" class="dropdown-form">
+                                        <form method="POST" class="dropdown-form">
                                             <input type="hidden" name="delete_id" value="<?php echo htmlspecialchars($promo['id']); ?>">
                                             <button type="submit" class="dropdown-item dropdown-delete-btn">Delete</button>
                                         </form>

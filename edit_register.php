@@ -121,7 +121,7 @@ mysqli_close($conn);
         <?php endif; ?>
         
         <div class="content-card">
-            <form method="POST" action="" class="edit-form">
+            <form method="POST" class="edit-form">
                 <input type="hidden" name="id" value="<?php echo htmlspecialchars($workshop['id']); ?>">
                 
                 <fieldset>
@@ -155,13 +155,30 @@ mysqli_close($conn);
                            value="<?php echo htmlspecialchars($workshop['city'] ?? ''); ?>"
                            pattern="^[A-Za-zÀ-ÖØ-öø-ÿ' -]+$" title="Letters, spaces, apostrophes and hyphens only">
                     
-                    <label for="state">State</label>
-                    <input type="text" id="state" name="state" 
-                           value="<?php echo htmlspecialchars($workshop['state'] ?? ''); ?>">
+                    <label for="state">State / Federal Territory</label>
+                    <select id="state" name="state">
+                        <option value="">-- Select State or Territory --</option>
+                        <option value="Johor" <?php echo ($workshop['state'] ?? '') === 'Johor' ? 'selected' : ''; ?>>Johor</option>
+                        <option value="Kedah" <?php echo ($workshop['state'] ?? '') === 'Kedah' ? 'selected' : ''; ?>>Kedah</option>
+                        <option value="Kelantan" <?php echo ($workshop['state'] ?? '') === 'Kelantan' ? 'selected' : ''; ?>>Kelantan</option>
+                        <option value="Melaka" <?php echo ($workshop['state'] ?? '') === 'Melaka' ? 'selected' : ''; ?>>Melaka</option>
+                        <option value="Negeri Sembilan" <?php echo ($workshop['state'] ?? '') === 'Negeri Sembilan' ? 'selected' : ''; ?>>Negeri Sembilan</option>
+                        <option value="Pahang" <?php echo ($workshop['state'] ?? '') === 'Pahang' ? 'selected' : ''; ?>>Pahang</option>
+                        <option value="Penang" <?php echo ($workshop['state'] ?? '') === 'Penang' ? 'selected' : ''; ?>>Penang</option>
+                        <option value="Perak" <?php echo ($workshop['state'] ?? '') === 'Perak' ? 'selected' : ''; ?>>Perak</option>
+                        <option value="Perlis" <?php echo ($workshop['state'] ?? '') === 'Perlis' ? 'selected' : ''; ?>>Perlis</option>
+                        <option value="Sabah" <?php echo ($workshop['state'] ?? '') === 'Sabah' ? 'selected' : ''; ?>>Sabah</option>
+                        <option value="Sarawak" <?php echo ($workshop['state'] ?? '') === 'Sarawak' ? 'selected' : ''; ?>>Sarawak</option>
+                        <option value="Selangor" <?php echo ($workshop['state'] ?? '') === 'Selangor' ? 'selected' : ''; ?>>Selangor</option>
+                        <option value="Terengganu" <?php echo ($workshop['state'] ?? '') === 'Terengganu' ? 'selected' : ''; ?>>Terengganu</option>
+                        <option value="Kuala Lumpur" <?php echo ($workshop['state'] ?? '') === 'Kuala Lumpur' ? 'selected' : ''; ?>>Kuala Lumpur (FT)</option>
+                        <option value="Labuan" <?php echo ($workshop['state'] ?? '') === 'Labuan' ? 'selected' : ''; ?>>Labuan (FT)</option>
+                        <option value="Putrajaya" <?php echo ($workshop['state'] ?? '') === 'Putrajaya' ? 'selected' : ''; ?>>Putrajaya (FT)</option>
+                    </select>
                     
                           <label for="dateofbirth">Date of Birth</label>
                           <input type="date" id="dateofbirth" name="dateofbirth" 
-                              value="<?php echo htmlspecialchars($workshop['dateofbirth'] ?? ''); ?>">
+                                value="<?php echo htmlspecialchars($workshop['dateofbirth'] ?? ''); ?>">
                 </fieldset>
                 
                 <fieldset>

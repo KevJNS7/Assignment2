@@ -123,7 +123,7 @@ mysqli_close($conn);
         <?php endif; ?>
         
         <div class="content-card">
-            <form method="POST" action="" class="edit-form">
+            <form method="POST" class="edit-form">
                 <input type="hidden" name="id" value="<?php echo htmlspecialchars($enquiry['id']); ?>">
                 
                 <fieldset>
@@ -165,12 +165,12 @@ mysqli_close($conn);
                         <?php $enq_type = trim($enquiry['enquiry_type'] ?? ''); ?>
                         <select id="enquiry_type" name="enquiry_type" required>
                             <option value="">Select Enquiry Type</option>
-                            <option value="General" <?php echo $enq_type === 'general' ? 'selected' : ''; ?>>General</option>
-                            <option value="Product" <?php echo $enq_type === 'product' ? 'selected' : ''; ?>>Product</option>
-                            <option value="Workshop" <?php echo $enq_type === 'workshop' ? 'selected' : ''; ?>>Workshop</option>
-                            <option value="Membership" <?php echo $enq_type === 'membership' ? 'selected' : ''; ?>>Membership</option>
-                            <option value="Complaint" <?php echo $enq_type === 'complaint' ? 'selected' : ''; ?>>Complaint</option>
-                            <option value="Other" <?php echo $enq_type === 'other' ? 'selected' : ''; ?>>Other</option>
+                            <option value="general" <?php echo $enq_type === 'general' ? 'selected' : ''; ?>>General</option>
+                            <option value="product" <?php echo $enq_type === 'product' ? 'selected' : ''; ?>>Product</option>
+                            <option value="workshop" <?php echo $enq_type === 'workshop' ? 'selected' : ''; ?>>Workshop</option>
+                            <option value="membership" <?php echo $enq_type === 'membership' ? 'selected' : ''; ?>>Membership</option>
+                            <option value="complaint" <?php echo $enq_type === 'complaint' ? 'selected' : ''; ?>>Complaint</option>
+                            <option value="other" <?php echo $enq_type === 'other' ? 'selected' : ''; ?>>Other</option>
                         </select>
                     </div>
                     

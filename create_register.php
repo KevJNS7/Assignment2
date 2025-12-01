@@ -110,14 +110,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="admin-page">
         <div class="page-title-row">
             <h1 class="page-title">Create New Registration</h1>
-            <a href="view_register.php" class="back-btn">← Back to List</a>
+            <a href="view_register.php" class="back-btn">Back to List</a>
         </div>
 
         <?php if (!empty($error)): ?>
             <div class="error-message"><?php echo htmlspecialchars($error); ?></div>
         <?php endif; ?>
 
-        <form method="POST" action="" class="enquiry-form">
+        <form method="POST" class="create-form-admin">
             <!-- Personal Info -->
             <div class="form-group">
                 <label for="firstname">First Name *</label>

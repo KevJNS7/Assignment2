@@ -91,14 +91,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="admin-page">
         <div class="page-title-row">
             <h1 class="page-title">Create New Enquiry</h1>
-            <a href="view_enquiry.php" class="back-btn">← Back to List</a>
+            <a href="view_enquiry.php" class="back-btn">Back to List</a>
         </div>
 
         <?php if (!empty($error)): ?>
             <div class="error-message"><?php echo htmlspecialchars($error); ?></div>
         <?php endif; ?>
 
-        <form method="POST" action="" class="enquiry-form">
+        <form method="POST" class="create-form-admin">
             <div class="form-group">
                 <label for="firstname">First Name *</label>
                 <input type="text" id="firstname" name="firstname" required pattern="^[A-Za-zÀ-ÖØ-öø-ÿ' -]+$" title="Letters, spaces, apostrophes and hyphens only">
@@ -114,14 +114,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <input type="email" id="email" name="email" required>
             </div>
 
-             <div class="form-group">
-                <label for="adress">Adress *</label>
-                <input type="adress" id="adress" name="adress" required>
+            <div class="form-group">
+                <label for="address">Address *</label>
+                <input type="text" id="address" name="address" required>
             </div>
 
              <div class="form-group">
-                <label for="City">City *</label>
-                <input type="city" id="city" name="city" required>
+                <label for="city">City *</label>
+                <input type="text" id="city" name="city" required>
             </div>
 
             <div class="form-group">
@@ -132,11 +132,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="form-group">
                 <label for="enquiry_type">Enquiry Type *</label>
                 <select id="enquiry_type" name="enquiry_type" required>
-                    <option value="">Select Type</option>
-                    <option value="General">General</option>
-                    <option value="Support">Support</option>
-                    <option value="Feedback">Feedback</option>
-                    <option value="Other">Other</option>
+                    <option value="">Select Enquiry Type</option>
+                    <option value="general">General</option>
+                    <option value="product">Product</option>
+                    <option value="workshop">Workshop</option>
+                    <option value="membership">Membership</option>
+                    <option value="complaint">Complaint</option>
+                    <option value="other">Other</option>
                 </select>
             </div>
 

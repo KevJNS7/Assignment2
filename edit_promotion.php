@@ -132,7 +132,7 @@ mysqli_close($conn);
             <?php endif; ?>
 
             <div class="content-card">
-                <form method="POST" action="" class="edit-form" enctype="multipart/form-data">
+                <form method="POST" class="edit-form" enctype="multipart/form-data">
                     <fieldset>
                         <legend>Promotion Details</legend>
                         

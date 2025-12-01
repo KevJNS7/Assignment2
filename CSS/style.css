@@ -4217,7 +4217,7 @@ nav ul li .dropdown-menu a:hover {
     content: "←";
 }
 
-.enquiry-form {
+.create-form-admin {
     display: flex;
     flex-direction: column;
     gap: 20px;

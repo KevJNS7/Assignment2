@@ -103,7 +103,7 @@ mysqli_close($conn);
             <?php endif; ?>
             
             <div class="content-card">
-                <form method="POST" action="" class="edit-form">
+                <form method="POST" class="edit-form">
                     <input type="hidden" name="id" value="<?php echo htmlspecialchars($membership['id']); ?>">
                     <input type="hidden" name="old_loginID" value="<?php echo htmlspecialchars($membership['loginID']); ?>">
                     

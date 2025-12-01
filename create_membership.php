@@ -90,14 +90,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="admin-page">
         <div class="page-title-row">
             <h1 class="page-title">Create New Membership</h1>
-            <a href="view_membership.php" class="back-btn">← Back to List</a>
+            <a href="view_membership.php" class="back-btn">Back to List</a>
         </div>
 
         <?php if (!empty($error)): ?>
             <div class="error-message"><?php echo htmlspecialchars($error); ?></div>
         <?php endif; ?>
 
-        <form method="POST" action="" class="enquiry-form">
+        <form method="POST" class="create-form-admin">
             <div class="form-group">
                 <label for="firstname">First Name *</label>
                 <input type="text" id="firstname" name="firstname" required pattern="^[A-Za-zÀ-ÖØ-öø-ÿ' -]+$" title="Letters, spaces, apostrophes and hyphens only">

@@ -111,13 +111,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="admin-page">
         <div class="page-title-row">
             <h1 class="page-title">Create New Promotion</h1>
+            <a href="view_membership.php" class="back-btn">Back to List</a>
         </div>
 
         <?php if (!empty($error)): ?>
             <div class="error-message"><?php echo htmlspecialchars($error); ?></div>
         <?php endif; ?>
 
-        <form method="POST" action="" class="enquiry-form" enctype="multipart/form-data">
+        <form method="POST" class="create-form-admin" enctype="multipart/form-data">
             <div class="form-group">
                 <label for="title">Title *</label>
                 <input type="text" id="title" name="title" required>

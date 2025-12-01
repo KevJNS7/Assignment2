@@ -6,17 +6,12 @@
  * Date: 2025
  */
 
-
-/**
- * Get user IP or ID
- */
+// Get user IP or ID
 function get_user_identifier() {
-    // Check if user is logged in
     if (isset($_SESSION['user_id'])) {
         return 'user_' . $_SESSION['user_id'];
     }
     
-    // Get IP address
     $ip = $_SERVER['REMOTE_ADDR'];
     if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
         $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
@@ -24,13 +19,10 @@ function get_user_identifier() {
     return 'ip_' . $ip;
 }
 
-/**
- * Check if user is blocked
- */
+// Check if user is blocked
 function check_spam_block($identifier, $conn) {
     $identifier = mysqli_real_escape_string($conn, $identifier);
     
-    // Check spam_blocks table
     $sql = "SELECT * FROM spam_blocks 
             WHERE user_identifier = '$identifier' 
             AND block_until > NOW()
@@ -52,14 +44,11 @@ function check_spam_block($identifier, $conn) {
     return ['blocked' => false];
 }
 
-/**
- * Record submission and check limit
- */
+// Record submission and check limit
 function record_submission($identifier, $form_type, $conn) {
     $identifier = mysqli_real_escape_string($conn, $identifier);
     $form_type = mysqli_real_escape_string($conn, $form_type);
     
-    // Count recent submissions (10 mins)
     $sql = "SELECT COUNT(*) as submission_count 
             FROM submission_logs 
             WHERE user_identifier = '$identifier' 
@@ -70,9 +59,7 @@ function record_submission($identifier, $form_type, $conn) {
     $row = mysqli_fetch_assoc($result);
     $submission_count = $row['submission_count'];
     
-    // Block if limit reached
     if ($submission_count >= 4) {
-        // Block for 10 minutes
         $block_sql = "INSERT INTO spam_blocks (user_identifier, reason, block_until) 
                       VALUES ('$identifier', 
                               'Exceeded rate limit for $form_type form', 
@@ -85,7 +72,6 @@ function record_submission($identifier, $form_type, $conn) {
         ];
     }
     
-    // Log submission
     $log_sql = "INSERT INTO submission_logs (user_identifier, form_type) 
                 VALUES ('$identifier', '$form_type')";
     mysqli_query($conn, $log_sql);
@@ -108,9 +94,7 @@ function record_submission($identifier, $form_type, $conn) {
     ];
 }
 
-/**
- * Display block message and exit
- */
+// Display block message
 function display_block_message($message) {
     ?>
     <!DOCTYPE html>
@@ -140,16 +124,12 @@ function display_block_message($message) {
     exit();
 }
 
-/**
- * Clean up old records
- */
+// Clean up old records
 function cleanup_old_records($conn) {
-    // Delete submission logs older than 1 hour
     $sql1 = "DELETE FROM submission_logs 
              WHERE submitted_at < DATE_SUB(NOW(), INTERVAL 1 HOUR)";
     mysqli_query($conn, $sql1);
     
-    // Delete expired blocks
     $sql2 = "DELETE FROM spam_blocks 
              WHERE block_until < NOW()";
     mysqli_query($conn, $sql2);
