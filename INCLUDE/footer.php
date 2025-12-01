@@ -14,7 +14,7 @@
                     <li> <a href="enhancement.php">Enhancement</a></li>
                     <li> <a href="acknowledge.php">Acknowledge</a></li>
                     <li> <a href="https://youtu.be/Wnv-ve2rwts?si=N3-SYA9JKMNv45jn">Group Presentation</a> </li>
-                    <li> <a href="#">Group Presentation 2 </a> </li>
+                    <li> <a href="https://youtu.be/5MosvXsBQPo">Group Presentation 2 </a> </li>
                 </ul>
             </div>
             <div class="quicklinks">

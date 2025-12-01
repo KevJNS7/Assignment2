@@ -71,7 +71,7 @@ function record_submission($identifier, $form_type, $conn) {
     $submission_count = $row['submission_count'];
     
     // Block if limit reached
-    if ($submission_count >= 5) {
+    if ($submission_count >= 4) {
         // Block for 10 minutes
         $block_sql = "INSERT INTO spam_blocks (user_identifier, reason, block_until) 
                       VALUES ('$identifier', 

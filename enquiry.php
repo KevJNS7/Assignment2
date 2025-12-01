@@ -53,7 +53,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
     </section>
 
     <div class="enquiryform">
-        <form id="enquiry-detail" method="post" action="enquiry_process.php" novalidate="novalidate">
+        <form id="enquiry-detail" method="post" action="enquiry_process.php">
         <div class="enquiry-form-container">
         <!-- Personal Information Fieldset -->
         <fieldset class="form-fieldset">
@@ -159,7 +159,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
                 <label>Services You're Interested In:</label>
                 <div class="checkbox-group">
                     <label class="checkbox-label">
-                        <input type="checkbox" name="interests[]" value="delivery" required> Products
+                        <input type="checkbox" name="interests[]" value="delivery"> Products
                     </label>
                     <label class="checkbox-label">
                         <input type="checkbox" name="interests[]" value="custom"> Custom Arrangements

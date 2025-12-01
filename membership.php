@@ -28,7 +28,7 @@
         </section>
 
     <div class="membership-reg">
-    <form id="membership-form" method="POST" action="membership_process.php" novalidate="novalidate">
+    <form id="membership-form" method="POST" action="membership_process.php">
 
         <fieldset>
         <legend>Membership Details</legend>

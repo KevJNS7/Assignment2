@@ -162,14 +162,15 @@ mysqli_close($conn);
                     
                     <div class="form-group">
                         <label for="enquiry_type">Enquiry Type *</label>
+                        <?php $enq_type = trim($enquiry['enquiry_type'] ?? ''); ?>
                         <select id="enquiry_type" name="enquiry_type" required>
                             <option value="">Select Enquiry Type</option>
-                            <option value="General" <?php echo $enquiry['enquiry_type'] === 'General' ? 'selected' : ''; ?>>General</option>
-                            <option value="Product" <?php echo $enquiry['enquiry_type'] === 'Product' ? 'selected' : ''; ?>>Product</option>
-                            <option value="Workshop" <?php echo $enquiry['enquiry_type'] === 'Workshop' ? 'selected' : ''; ?>>Workshop</option>
-                            <option value="Membership" <?php echo $enquiry['enquiry_type'] === 'Membership' ? 'selected' : ''; ?>>Membership</option>
-                            <option value="Complaint" <?php echo $enquiry['enquiry_type'] === 'Complaint' ? 'selected' : ''; ?>>Complaint</option>
-                            <option value="Other" <?php echo $enquiry['enquiry_type'] === 'Other' ? 'selected' : ''; ?>>Other</option>
+                            <option value="General" <?php echo $enq_type === 'general' ? 'selected' : ''; ?>>General</option>
+                            <option value="Product" <?php echo $enq_type === 'product' ? 'selected' : ''; ?>>Product</option>
+                            <option value="Workshop" <?php echo $enq_type === 'workshop' ? 'selected' : ''; ?>>Workshop</option>
+                            <option value="Membership" <?php echo $enq_type === 'membership' ? 'selected' : ''; ?>>Membership</option>
+                            <option value="Complaint" <?php echo $enq_type === 'complaint' ? 'selected' : ''; ?>>Complaint</option>
+                            <option value="Other" <?php echo $enq_type === 'other' ? 'selected' : ''; ?>>Other</option>
                         </select>
                     </div>
                     

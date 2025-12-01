@@ -50,7 +50,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
     </section>
 
     <div>
-         <form id="worksho_details" method="post" action="register_process.php" novalidate="novalidate">
+         <form id="worksho_details" method="post" action="register_process.php">
 
             <!-- Personal Info -->
             <fieldset>
@@ -159,7 +159,7 @@ if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
                 <!-- Radio (membership type) -->
                 <label>Membership Type:</label>
                 <div class="workshop-radio">
-                <label><input type="radio" name="membershipType" value="standard" id="standard" required> Standard</label>
+                <label><input type="radio" name="membershipType" value="standard" id="standard"> Standard</label>
                 <label><input type="radio" name="membershipType" value="premium" id="premium"> Premium</label>
                 </div>
 

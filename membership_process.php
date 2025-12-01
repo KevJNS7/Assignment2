@@ -46,7 +46,7 @@ if (!empty($missing_fields)) {
     <body>
         <div class='process'>
         <div class='processcontainer'>
-        <div class='processcard'>
+        <div class='processcarderror'>
             <h1>Membership Registration Failed</h1>
             <p>Please fill in all required fields.</p>
             <div class='button-membership-process'><a href='membership.php'>Go Back</a></div>
