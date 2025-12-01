@@ -51,7 +51,7 @@
                 <div class="enh-layout">
                     <div class="enh-text">
                         <h2>2. Anti Spam Feature</h2>
-                        <p>Prevents rapid repeat submissions using rate limiting and temporary blocks. If too many submissions happen, the user is blocked briefly and sees a friendly message.</p>
+                        <p>Prevents rapid repeat submissions using rate limiting and temporary blocks. If too many submissions happen, the user will be blocked</p>
                         <p>You can find this enhancement on:</p>
                         <div class="enhancement-link">
                             <a href="membership.php">Membership</a>
@@ -70,7 +70,7 @@
                 <div class="enh-layout">
                     <div class="enh-text">
                         <h2>3. Promotion Module</h2>
-                        <p>Admins manage promotions and upload images with validation (file size, type, and image integrity). Promotions can be created, edited, and listed securely.</p>
+                        <p>Admins manage promotions and upload images with validation (file size, type, and image integrity). Promotions can be created, edited, and listed.</p>
                         <p>You can find this enhancement on:</p>
                         <div class="enhancement-link">
                             <a href="view_promotion.php">View Promotion </a>
